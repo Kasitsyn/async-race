@@ -12,8 +12,8 @@
 <body>
   <header class="header">
     <nav class="nav">
-      <button class="btn header__btn">To garage</button>
-      <button class="btn header__btn">To winners</button>
+      <button class="btn header__btn" id="to-garage">To garage</button>
+      <button class="btn header__btn" id="to-winners">To winners</button>
     </nav>
   </header>
   <main class="main">
@@ -21,16 +21,48 @@
       <form action="" class="garage__form garage__form--create">
         <input type="text" class="garage__form" name="name">
         <input type="color" class="garage__form" name="color">
-        <input type="submit" value="Create">
+        <input type="submit" class="garage__submit" id="create-btn" value="Create">
       </form>
       <form action="" class="garage__form garage__form--update">
         <input type="text" class="garage__form" name="name">
         <input type="color" class="garage__form" name="color">
-        <input type="submit" value="Update">
+        <input type="submit" class="garage__submit" id="update-btn" value="Update">
       </form>
-      <button class="btn btn-race">Race</button>
-      <button class="btn btn-reset">Reset</button>
-      <button class="btn btn-generate">Generate cars</button>
+      <div class="menu">
+        <button class="btn btn-race" id="race-btn">Race</button>
+        <button class="btn btn-reset" id="reset-btn">Reset</button>
+        <button class="btn btn-generate" id="generate-cars-btn">Generate cars</button>
+      </div>
+      <h1 class="title">
+        Garage <span class="cars-num">(4)</span>
+      </h1>
+      <h2 class="subtitle">Page <span class="page-num">#1</span></h2>
+      <div class="articles-wrapper">
+        <article class="article">
+          <header class="article__header">
+            <button class="btn article__btn" id="select-btn">Select</button>
+            <button class="btn article__btn" id="remove-btn">Remove</button>
+            <h3 class="article__title">Tesla</h3>
+          </header>
+          <div class="controls">
+            <button class="control__btn control__btn--start" id="start-btn">A</button>
+            <button class="control__btn control__btn--break" id="break-btn">B</button>
+          </div>
+          <div class="racing">
+            <img src="./src/assets/icons/car.svg" alt="car" width="100" height="100">
+          </div>
+          <nav class="article__nav">
+            <button class="btn nav__btn-prev" id="prev-btn">Prev</button>
+            <button class="btn nav__btn-next" id="next-btn">Next</button>
+          </nav>
+        </article>
+      </div>
+    </section>
+    <section class="winners">
+      <h1 class="title">
+        Winners <span class="winners-num">(4)</span>
+      </h1>
+      <h2 class="subtitle">Page <span class="page-num">#1</span></h2>
     </section>
   </main>
 
