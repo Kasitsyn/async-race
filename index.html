@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,7 +8,33 @@
   <link rel="stylesheet" href="./src/css/style.css">
   <title>Async Race</title>
 </head>
+
 <body>
+  <header class="header">
+    <nav class="nav">
+      <button class="btn header__btn">To garage</button>
+      <button class="btn header__btn">To winners</button>
+    </nav>
+  </header>
+  <main class="main">
+    <section class="garage">
+      <form action="" class="garage__form garage__form--create">
+        <input type="text" class="garage__form" name="name">
+        <input type="color" class="garage__form" name="color">
+        <input type="submit" value="Create">
+      </form>
+      <form action="" class="garage__form garage__form--update">
+        <input type="text" class="garage__form" name="name">
+        <input type="color" class="garage__form" name="color">
+        <input type="submit" value="Update">
+      </form>
+      <button class="btn btn-race">Race</button>
+      <button class="btn btn-reset">Reset</button>
+      <button class="btn btn-generate">Generate cars</button>
+    </section>
+  </main>
+
   <script src="./src/script/app.js" type="module"></script>
 </body>
+
 </html>
