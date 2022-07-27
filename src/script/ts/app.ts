@@ -20,6 +20,7 @@ const UI = {
     generateCarsBtn: document.querySelector<HTMLButtonElement>('#generate-cars-btn')
   },
   garage: {
+    garageSection: document.querySelector<HTMLDivElement>('#garage'),
     carsNum: document.querySelector<HTMLSpanElement>('#cars-num-garage'),
     pageNumGarage: document.querySelector<HTMLSpanElement>('#page-num-garage'),
   },
@@ -37,6 +38,7 @@ const UI = {
     nextBtn: document.querySelector<HTMLButtonElement>('#next-btn')
   },
   winners: {
+    winnersSection: document.querySelector<HTMLDivElement>('#winners'),
     winnersNum: document.querySelector<HTMLSpanElement>('#winners-num'),
     pageNumWinners: document.querySelector<HTMLSpanElement>('#page-num-winners')
   }
@@ -45,6 +47,16 @@ const UI = {
 //================= HANDLERS =================
 
 
-const addHeaderBtnHandler = (): void {
-  
+const addHeaderButtonsHandler = (): void => {
+  UI.header.toWinnersBtn?.addEventListener('click', (e) => {
+    UI.garage.garageSection?.classList.add('visually-hidden')
+    UI.winners.winnersSection?.classList.remove('visually-hidden')
+  })
+
+  UI.header.toGarageBtn?.addEventListener('click', (e) => {
+    UI.winners.winnersSection?.classList.add('visually-hidden')
+    UI.garage.garageSection?.classList.remove('visually-hidden')
+  })
 }
+
+addHeaderButtonsHandler()

@@ -21,6 +21,7 @@ const UI = {
         generateCarsBtn: document.querySelector('#generate-cars-btn')
     },
     garage: {
+        garageSection: document.querySelector('#garage'),
         carsNum: document.querySelector('#cars-num-garage'),
         pageNumGarage: document.querySelector('#page-num-garage'),
     },
@@ -38,10 +39,23 @@ const UI = {
         nextBtn: document.querySelector('#next-btn')
     },
     winners: {
+        winnersSection: document.querySelector('#winners'),
         winnersNum: document.querySelector('#winners-num'),
         pageNumWinners: document.querySelector('#page-num-winners')
     }
 };
-for (let key in UI) {
-    console.log(UI[key]);
-}
+//================= HANDLERS =================
+const addHeaderButtonsHandler = () => {
+    var _a, _b;
+    (_a = UI.header.toWinnersBtn) === null || _a === void 0 ? void 0 : _a.addEventListener('click', (e) => {
+        var _a, _b;
+        (_a = UI.garage.garageSection) === null || _a === void 0 ? void 0 : _a.classList.add('visually-hidden');
+        (_b = UI.winners.winnersSection) === null || _b === void 0 ? void 0 : _b.classList.remove('visually-hidden');
+    });
+    (_b = UI.header.toGarageBtn) === null || _b === void 0 ? void 0 : _b.addEventListener('click', (e) => {
+        var _a, _b;
+        (_a = UI.winners.winnersSection) === null || _a === void 0 ? void 0 : _a.classList.add('visually-hidden');
+        (_b = UI.garage.garageSection) === null || _b === void 0 ? void 0 : _b.classList.remove('visually-hidden');
+    });
+};
+addHeaderButtonsHandler();
