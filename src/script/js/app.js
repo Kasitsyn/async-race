@@ -1,4 +1,5 @@
-"use strict";
+import { getCar } from './API.js';
+import { Article } from './Article.js';
 //================= UI =================
 const UI = {
     header: {
@@ -59,3 +60,10 @@ const addHeaderButtonsHandler = () => {
     });
 };
 addHeaderButtonsHandler();
+//================= RENDER =================
+const renderArticle = () => {
+    const article = new Article(0, 'ass', 'black');
+    article.generateArticle();
+};
+renderArticle();
+getCar(1);
