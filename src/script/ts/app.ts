@@ -1,5 +1,6 @@
-import { getCar, getCars } from './API.js';
+import { createCar, deleteCar, getCar, getCars, updateCar, updateEngine } from './API.js';
 import { Article } from './Article.js';
+import { ICar } from './types/types.js';
 //================= UI =================
 const UI = {
   header: {
@@ -72,4 +73,12 @@ const renderArticle = (): void => {
 
 renderArticle();
 
-getCar(1)
+//=================  =================
+
+const car: ICar = {
+  name: 'ass',
+  color: '#ffffff',
+}
+
+
+const ass = updateEngine(1, 'stopped');

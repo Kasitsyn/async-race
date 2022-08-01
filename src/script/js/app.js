@@ -1,4 +1,4 @@
-import { getCar } from './API.js';
+import { updateEngine } from './API.js';
 import { Article } from './Article.js';
 //================= UI =================
 const UI = {
@@ -66,4 +66,9 @@ const renderArticle = () => {
     article.generateArticle();
 };
 renderArticle();
-getCar(1);
+//=================  =================
+const car = {
+    name: 'ass',
+    color: '#ffffff',
+};
+updateEngine(1, 'stopped');
