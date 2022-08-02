@@ -1,4 +1,4 @@
-import { carData, engine, engineStatus, ICar } from "./types/types";
+import { carData, engine, engineStatus, ICar, queryParams } from "./types/types";
 
 const baseUrl: string = 'http://127.0.0.1:3000'
 const path: {
@@ -11,10 +11,11 @@ const path: {
   winners: '/winners'
 }
 
-// const generateQueryString = (params) => params.length && `?${params.map(x => `${x.key}=${x.value}`).join('&')}`
+export const generateQueryString = (params: queryParams[] | [] = []) => params.length
+  && `?${params.map((x: queryParams) => `${x.key}=${x.value}`).join('&')}`
 
 
-//================= CAR API =================
+//================= CAR =================
 
 export const getCars = async (): Promise<string[]> => {
   const response = await fetch(`${baseUrl}${path.garage}`)
@@ -64,14 +65,25 @@ export const updateCar = async (id: number, carData: carData): Promise<ICar> => 
 }
 
 
-//================= ENGINE API =================
+//================= ENGINE =================
 
-export const updateEngine = async (id: number, engineStatus: engineStatus): Promise<engine> => {
-  const response = await fetch(`${baseUrl}${path.engine}?id=${id}&status=${engineStatus}`, {
-    method: 'PATCH'
+export const toggleEngine = async (queryParams: queryParams[]): Promise<engine> => {
+  const response = await fetch(`${baseUrl}${path.engine}${generateQueryString(queryParams)}`, {
+    method: "PATCH"
   })
 
   const engine = await response.json();
   return engine;
 }
+
+export const engineDrive = async (queryParams: queryParams[]): Promise<engine> => {
+  const response = await fetch(`${baseUrl}${path.engine}${generateQueryString(queryParams)}`, {
+    method: "PATCH"
+  })
+
+  const engine = await response.json();
+  return engine;
+}
+
+//================= WINNERS =================
 

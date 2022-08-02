@@ -1,4 +1,4 @@
-import { updateEngine } from './API.js';
+import { engineDrive, toggleEngine } from './API.js';
 import { Article } from './Article.js';
 //================= UI =================
 const UI = {
@@ -71,4 +71,7 @@ const car = {
     name: 'ass',
     color: '#ffffff',
 };
-updateEngine(1, 'stopped');
+const bss = await toggleEngine([{ key: 'id', value: '1' }, { key: 'status', value: 'started' }]);
+console.log(bss);
+const ass = await engineDrive([{ key: 'id', value: '1' }, { key: 'status', value: 'drive' }]);
+console.log(ass);

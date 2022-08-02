@@ -14,3 +14,8 @@ export type engine = {
   velocity: number;
   distance: number;
 } 
+
+export type queryParams = {
+  key: string;
+  value: string;
+}

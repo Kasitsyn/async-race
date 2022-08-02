@@ -1,4 +1,4 @@
-import { createCar, deleteCar, getCar, getCars, updateCar, updateEngine } from './API.js';
+import { createCar, deleteCar, engineDrive, generateQueryString, getCar, getCars, updateCar, toggleEngine } from './API.js';
 import { Article } from './Article.js';
 import { ICar } from './types/types.js';
 //================= UI =================
@@ -80,5 +80,3 @@ const car: ICar = {
   color: '#ffffff',
 }
 
-
-const ass = updateEngine(1, 'stopped');
