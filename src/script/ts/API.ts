@@ -1,4 +1,4 @@
-import { carData, engine, engineStatus, ICar, queryParams } from "./types/types";
+import { carData, engine, engineStatus, ICar, queryParams, winner } from "./types/types";
 
 const baseUrl: string = 'http://127.0.0.1:3000'
 const path: {
@@ -29,39 +29,39 @@ export const getCar = async (id: number): Promise<ICar> => {
   return data
 }
 
-export const createCar = async (carData: ICar): Promise<ICar> => {
+export const createCar = async (dataParams: ICar): Promise<ICar> => {
   const response = await fetch(`${baseUrl}${path.garage}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(carData)
+    body: JSON.stringify(dataParams)
   })
 
-  const car = await response.json()
-  return car
+  const data = await response.json()
+  return data
 }
 
-export const deleteCar = async (id: number): Promise<ICar> => {
+export const deleteCar = async (id: number): Promise<{}> => {
   const response = await fetch(`${baseUrl}${path.garage}/${id}`, {
     method: 'DELETE'
   })
 
-  const car = await response.json()
-  return car
+  const data = await response.json()
+  return data
 }
 
-export const updateCar = async (id: number, carData: carData): Promise<ICar> => {
+export const updateCar = async (id: number, dataParams: carData): Promise<ICar> => {
   const response = await fetch(`${baseUrl}${path.garage}/${id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(carData)
+    body: JSON.stringify(dataParams)
   })
 
-  const car = await response.json()
-  return car
+  const data = await response.json()
+  return data
 }
 
 
@@ -72,8 +72,8 @@ export const toggleEngine = async (queryParams: queryParams[]): Promise<engine> 
     method: "PATCH"
   })
 
-  const engine = await response.json();
-  return engine;
+  const data = await response.json();
+  return data;
 }
 
 export const engineDrive = async (queryParams: queryParams[]): Promise<engine> => {
@@ -81,9 +81,57 @@ export const engineDrive = async (queryParams: queryParams[]): Promise<engine> =
     method: "PATCH"
   })
 
-  const engine = await response.json();
-  return engine;
+  const data = await response.json();
+  return data;
 }
 
 //================= WINNERS =================
 
+export const getWinners = async (queryParams: queryParams[]): Promise<{ data: winner[], count: number }> => {
+  const response = await fetch(`${baseUrl}${path.winners}${generateQueryString(queryParams)}`)
+  const data = await response.json()
+
+  const count = Number(response.headers.get('X-Total-Count'))
+  return { data, count }
+}
+
+export const getWinner = async (id: number): Promise<winner> => {
+  const response = await fetch(`${baseUrl}${path.winners}/${id}`)
+  const data = await response.json()
+  return data
+}
+
+export const createWinner = async (dataParams: winner): Promise<winner> => {
+  const response = await fetch(`${baseUrl}${path.garage}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(dataParams)
+  })
+
+  const data = await response.json()
+  return data
+}
+
+export const deleteWinner = async (id: number): Promise<{}> => {
+  const response = await fetch(`${baseUrl}${path.garage}/${id}`, {
+    method: 'DELETE'
+  })
+
+  const data = await response.json()
+  return data
+}
+
+export const updateWinner = async (id: number, dataParams: winner): Promise<winner | {}> => {
+  const response = await fetch(`${baseUrl}${path.winners}/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(dataParams)
+  })
+
+  const data = await response.json()
+  return data
+}

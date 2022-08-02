@@ -1,4 +1,4 @@
-import { engineDrive, toggleEngine } from './API.js';
+import { updateWinner } from './API.js';
 import { Article } from './Article.js';
 //================= UI =================
 const UI = {
@@ -71,7 +71,9 @@ const car = {
     name: 'ass',
     color: '#ffffff',
 };
-const bss = await toggleEngine([{ key: 'id', value: '1' }, { key: 'status', value: 'started' }]);
-console.log(bss);
-const ass = await engineDrive([{ key: 'id', value: '1' }, { key: 'status', value: 'drive' }]);
+const winner = {
+    wins: 12221,
+    time: 2.92
+};
+const ass = await updateWinner(1, winner);
 console.log(ass);

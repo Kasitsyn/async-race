@@ -1,6 +1,6 @@
-import { createCar, deleteCar, engineDrive, generateQueryString, getCar, getCars, updateCar, toggleEngine } from './API.js';
+import { createCar, deleteCar, engineDrive, generateQueryString, getCar, getCars, updateCar, toggleEngine, getWinners, getWinner, createWinner, deleteWinner, updateWinner } from './API.js';
 import { Article } from './Article.js';
-import { ICar } from './types/types.js';
+import { ICar, winner } from './types/types.js';
 //================= UI =================
 const UI = {
   header: {
@@ -80,3 +80,10 @@ const car: ICar = {
   color: '#ffffff',
 }
 
+const winner: winner = {
+  wins: 12221,
+  time: 2.92
+}
+
+const ass = await updateWinner(1, winner)
+console.log(ass)
