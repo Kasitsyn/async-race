@@ -1,6 +1,18 @@
 import { createCar, deleteCar, engineDrive, generateQueryString, getCar, getCars, updateCar, toggleEngine, getWinners, getWinner, createWinner, deleteWinner, updateWinner } from './API.js';
 import { Article } from './Article.js';
 import { ICar, winner } from './types/types.js';
+
+//================= DATA FOR TESTING =================
+const car: ICar = {
+  name: 'ass',
+  color: '#ffffff',
+}
+
+const winner: winner = {
+  wins: 12221,
+  time: 2.92
+}
+
 //================= UI =================
 const UI = {
   header: {
@@ -62,7 +74,15 @@ const addHeaderButtonsHandler = (): void => {
   })
 }
 
+const addGarageFormsHandler = (): void => {
+  UI.form.colorInput?.addEventListener('change', (e) => {
+    
+  })
+}
+
 addHeaderButtonsHandler()
+addGarageFormsHandler()
+
 
 //================= RENDER =================
 
@@ -73,17 +93,10 @@ const renderArticle = (): void => {
 
 renderArticle();
 
-//=================  =================
+//================= GARAGE FORM =================
 
-const car: ICar = {
-  name: 'ass',
-  color: '#ffffff',
+const getColor = (): string => {
+  
+  return 'ass'
 }
 
-const winner: winner = {
-  wins: 12221,
-  time: 2.92
-}
-
-const ass = await updateWinner(1, winner)
-console.log(ass)

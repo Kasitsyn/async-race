@@ -7,10 +7,11 @@ const path = {
 export const generateQueryString = (params = []) => params.length
     && `?${params.map((x) => `${x.key}=${x.value}`).join('&')}`;
 //================= CAR =================
-export const getCars = async () => {
-    const response = await fetch(`${baseUrl}${path.garage}`);
+export const getCars = async (queryParams) => {
+    const response = await fetch(`${baseUrl}${path.garage}${generateQueryString(queryParams)}`);
     const data = await response.json();
-    return data;
+    const count = Number(response.headers.get('X-Total-Count'));
+    return { data, count };
 };
 export const getCar = async (id) => {
     const response = await fetch(`${baseUrl}${path.garage}/${id}`);
@@ -102,3 +103,4 @@ export const updateWinner = async (id, dataParams) => {
     const data = await response.json();
     return data;
 };
+console.log('ass');

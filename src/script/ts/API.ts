@@ -17,10 +17,12 @@ export const generateQueryString = (params: queryParams[] | [] = []) => params.l
 
 //================= CAR =================
 
-export const getCars = async (): Promise<string[]> => {
-  const response = await fetch(`${baseUrl}${path.garage}`)
+export const getCars = async (queryParams: queryParams[]): Promise<{data: ICar[], count: number} > => {
+  const response = await fetch(`${baseUrl}${path.garage}${generateQueryString(queryParams)}`)
   const data = await response.json()
-  return data
+
+  const count = Number(response.headers.get('X-Total-Count'))
+  return {data, count}
 }
 
 export const getCar = async (id: number): Promise<ICar> => {
@@ -135,3 +137,5 @@ export const updateWinner = async (id: number, dataParams: winner): Promise<winn
   const data = await response.json()
   return data
 }
+
+console.log('ass')

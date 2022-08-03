@@ -1,5 +1,13 @@
-import { updateWinner } from './API.js';
 import { Article } from './Article.js';
+//================= DATA FOR TESTING =================
+const car = {
+    name: 'ass',
+    color: '#ffffff',
+};
+const winner = {
+    wins: 12221,
+    time: 2.92
+};
 //================= UI =================
 const UI = {
     header: {
@@ -59,7 +67,13 @@ const addHeaderButtonsHandler = () => {
         (_b = UI.garage.garageSection) === null || _b === void 0 ? void 0 : _b.classList.remove('visually-hidden');
     });
 };
+const addGarageFormsHandler = () => {
+    var _a;
+    (_a = UI.form.colorInput) === null || _a === void 0 ? void 0 : _a.addEventListener('change', (e) => {
+    });
+};
 addHeaderButtonsHandler();
+addGarageFormsHandler();
 //================= RENDER =================
 const renderArticle = () => {
     const article = new Article(0, 'ass', 'black');
@@ -67,13 +81,3 @@ const renderArticle = () => {
 };
 renderArticle();
 //=================  =================
-const car = {
-    name: 'ass',
-    color: '#ffffff',
-};
-const winner = {
-    wins: 12221,
-    time: 2.92
-};
-const ass = await updateWinner(1, winner);
-console.log(ass);
