@@ -1,5 +1,6 @@
 import { createCar, deleteCar, engineDrive, generateQueryString, getCar, getCars, updateCar, toggleEngine, getWinners, getWinner, createWinner, deleteWinner, updateWinner } from './API.js';
 import { Article } from './Article.js';
+import { store } from './Store.js';
 import { ICar, winner } from './types/types.js';
 
 //================= DATA FOR TESTING =================
@@ -59,6 +60,17 @@ const UI = {
   }
 }
 
+//================= GARAGE FORM =================
+
+const getColor = (e: Event): string => {
+  return (e.target as HTMLInputElement).value
+}
+
+const getName = (e: Event): string => {
+  return (e.target as HTMLInputElement).value
+}
+
+
 //================= HANDLERS =================
 
 
@@ -75,14 +87,15 @@ const addHeaderButtonsHandler = (): void => {
 }
 
 const addGarageFormsHandler = (): void => {
-  UI.form.colorInput?.addEventListener('change', (e) => {
-    
-  })
+  UI.form.colorInput?.addEventListener('change', (e) => store.color = getColor(e))
+  UI.form.colorInputUpdate?.addEventListener('change', (e) => store.color = getColor(e))
+
+  UI.form.formCreate?.addEventListener('input', (e) => store.name = getName(e))
+  UI.form.formUpdate?.addEventListener('input', (e) => {store.name = getName(e)})
 }
 
 addHeaderButtonsHandler()
 addGarageFormsHandler()
-
 
 //================= RENDER =================
 
@@ -93,10 +106,7 @@ const renderArticle = (): void => {
 
 renderArticle();
 
-//================= GARAGE FORM =================
 
-const getColor = (): string => {
-  
-  return 'ass'
-}
+
+
 

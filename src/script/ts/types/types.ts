@@ -24,6 +24,3 @@ export type winner = {
   wins: number,
   time: number
 }
-
-
-

@@ -1,4 +1,5 @@
 import { Article } from './Article.js';
+import { store } from './Store.js';
 //================= DATA FOR TESTING =================
 const car = {
     name: 'ass',
@@ -53,6 +54,13 @@ const UI = {
         pageNumWinners: document.querySelector('#page-num-winners')
     }
 };
+//================= GARAGE FORM =================
+const getColor = (e) => {
+    return e.target.value;
+};
+const getName = (e) => {
+    return e.target.value;
+};
 //================= HANDLERS =================
 const addHeaderButtonsHandler = () => {
     var _a, _b;
@@ -68,9 +76,11 @@ const addHeaderButtonsHandler = () => {
     });
 };
 const addGarageFormsHandler = () => {
-    var _a;
-    (_a = UI.form.colorInput) === null || _a === void 0 ? void 0 : _a.addEventListener('change', (e) => {
-    });
+    var _a, _b, _c, _d;
+    (_a = UI.form.colorInput) === null || _a === void 0 ? void 0 : _a.addEventListener('change', (e) => store.color = getColor(e));
+    (_b = UI.form.colorInputUpdate) === null || _b === void 0 ? void 0 : _b.addEventListener('change', (e) => store.color = getColor(e));
+    (_c = UI.form.formCreate) === null || _c === void 0 ? void 0 : _c.addEventListener('input', (e) => store.name = getName(e));
+    (_d = UI.form.formUpdate) === null || _d === void 0 ? void 0 : _d.addEventListener('input', (e) => { store.name = getName(e); });
 };
 addHeaderButtonsHandler();
 addGarageFormsHandler();
@@ -80,4 +90,3 @@ const renderArticle = () => {
     article.generateArticle();
 };
 renderArticle();
-//=================  =================
