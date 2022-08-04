@@ -1,8 +1,8 @@
-import {constantQueryParams, engine, engineStatus, ICar, queryParams, winner } from "./types/types";
+import { constantQueryParams, engine, engineStatus, ICar, queryParams, winner } from "./types/types";
 
 export const QUERYPARAMS: constantQueryParams = {
   PAGE: '_page',
-  LIMIT: '_limit'
+  LIMIT: '_limit',
 }
 
 const baseUrl: string = 'http://127.0.0.1:3000'
@@ -22,12 +22,12 @@ export const generateQueryString = (params: queryParams[] | [] = []) => params.l
 
 //================= CAR =================
 
-export const getCars = async (queryParams: queryParams[]): Promise<{data: ICar[], count: number} > => {
+export const getCars = async (queryParams: queryParams[]): Promise<{ data: ICar[], count: number }> => {
   const response = await fetch(`${baseUrl}${path.garage}${generateQueryString(queryParams)}`)
   const data = await response.json()
 
   const count = Number(response.headers.get('X-Total-Count'))
-  return {data, count}
+  return { data, count }
 }
 
 export const getCar = async (id: number | null): Promise<ICar> => {

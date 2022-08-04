@@ -1,5 +1,5 @@
 import { createCar, deleteCar, engineDrive, generateQueryString, getCar, getCars, updateCar, toggleEngine, getWinners, getWinner, createWinner, deleteWinner, updateWinner, QUERYPARAMS } from './API.js';
-import { Article } from './Article.js';
+import { addArticleBtnHandlers, Article } from './Article.js';
 import { DATABASE, initState, saveToLocalStorage, serverData, state } from './Store.js';
 import { ICar, winner } from './types/types.js';
 
@@ -40,15 +40,15 @@ const UI = {
     carsNum: document.querySelector<HTMLSpanElement>('#cars-num-garage'),
     pageNumGarage: document.querySelector<HTMLSpanElement>('#page-num-garage'),
   },
-  article: {
-    selectBtn: document.querySelector<HTMLButtonElement>('#select-btn'),
-    removeBtn: document.querySelector<HTMLButtonElement>('#remove-btn'),
-    title: document.querySelector<HTMLHeadingElement>('#article-title'),
-    startBtn: document.querySelector<HTMLButtonElement>('#start-btn'),
-    breakBtn: document.querySelector<HTMLButtonElement>('#break-btn'),
-    carImg: document.querySelector<HTMLImageElement>('#car-img'),
-    flagImg: document.querySelector<HTMLImageElement>('#flag-img'),
-  },
+  // article: {
+  //   selectBtn: document.querySelector<HTMLButtonElement>('#select-btn'),
+  //   removeBtn: document.querySelector<HTMLButtonElement>('#remove-btn'),
+  //   title: document.querySelector<HTMLHeadingElement>('#article-title'),
+  //   startBtn: document.querySelector<HTMLButtonElement>('#start-btn'),
+  //   breakBtn: document.querySelector<HTMLButtonElement>('#break-btn'),
+  //   carImg: document.querySelector<HTMLImageElement>('#car-img'),
+  //   flagImg: document.querySelector<HTMLImageElement>('#flag-img'),
+  // },
   footer: {
     prevBtn: document.querySelector<HTMLButtonElement>('#prev-btn'),
     nextBtn: document.querySelector<HTMLButtonElement>('#next-btn')
@@ -111,16 +111,15 @@ const addGarageFormsHandler = (): void => {
     const name = state.name
     const color = state.color
     await createCar({ name, color })
-    const serverData = await getCars([{ key: QUERYPARAMS.PAGE, value: 1 }, { key: QUERYPARAMS.LIMIT, value: 100 }])
-    serverData.data.forEach(car => {
-      car.id && car.name && car.color && renderArticles(car.id, car.name, car.color)
-      
-    })
+    await renderArticleAll()
+    
   })
+
 }
 
 addHeaderButtonsHandler()
 addGarageFormsHandler()
+
 
 //================= CREATE CAR =================
 
@@ -128,9 +127,20 @@ addGarageFormsHandler()
 
 //================= RENDER =================
 
-const renderArticles = (id: number, carsName: string, carsColor: string): void => {
+const renderArticle = (id: number, carsName: string, carsColor: string): void => {
   const article = new Article(id, carsName, carsColor);
   article.generateArticle();
+
+}
+
+export const renderArticleAll = async () => {
+  const articlesWrapper = document.querySelector<HTMLDivElement>('.articles-wrapper')
+  if (articlesWrapper) articlesWrapper.innerHTML ='';
+  const serverData = await getCars([{ key: QUERYPARAMS.PAGE, value: 1 }, { key: QUERYPARAMS.LIMIT, value: 200 }])
+  serverData.data.forEach(car => {
+    car.id && car.name && car.color && renderArticle(car.id, car.name, car.color)
+  })
+  addArticleBtnHandlers()
 }
 
 

@@ -1,5 +1,5 @@
 import { createCar, getCars, QUERYPARAMS } from './API.js';
-import { Article } from './Article.js';
+import { addArticleBtnHandlers, Article } from './Article.js';
 import { DATABASE, initState, saveToLocalStorage, state } from './Store.js';
 //================= DATA FOR TESTING =================
 const car = {
@@ -36,15 +36,15 @@ const UI = {
         carsNum: document.querySelector('#cars-num-garage'),
         pageNumGarage: document.querySelector('#page-num-garage'),
     },
-    article: {
-        selectBtn: document.querySelector('#select-btn'),
-        removeBtn: document.querySelector('#remove-btn'),
-        title: document.querySelector('#article-title'),
-        startBtn: document.querySelector('#start-btn'),
-        breakBtn: document.querySelector('#break-btn'),
-        carImg: document.querySelector('#car-img'),
-        flagImg: document.querySelector('#flag-img'),
-    },
+    // article: {
+    //   selectBtn: document.querySelector<HTMLButtonElement>('#select-btn'),
+    //   removeBtn: document.querySelector<HTMLButtonElement>('#remove-btn'),
+    //   title: document.querySelector<HTMLHeadingElement>('#article-title'),
+    //   startBtn: document.querySelector<HTMLButtonElement>('#start-btn'),
+    //   breakBtn: document.querySelector<HTMLButtonElement>('#break-btn'),
+    //   carImg: document.querySelector<HTMLImageElement>('#car-img'),
+    //   flagImg: document.querySelector<HTMLImageElement>('#flag-img'),
+    // },
     footer: {
         prevBtn: document.querySelector('#prev-btn'),
         nextBtn: document.querySelector('#next-btn')
@@ -100,17 +100,24 @@ const addGarageFormsHandler = () => {
         const name = state.name;
         const color = state.color;
         await createCar({ name, color });
-        const serverData = await getCars([{ key: QUERYPARAMS.PAGE, value: 1 }, { key: QUERYPARAMS.LIMIT, value: 100 }]);
-        serverData.data.forEach(car => {
-            car.id && car.name && car.color && renderArticles(car.id, car.name, car.color);
-        });
+        await renderArticleAll();
     });
 };
 addHeaderButtonsHandler();
 addGarageFormsHandler();
 //================= CREATE CAR =================
 //================= RENDER =================
-const renderArticles = (id, carsName, carsColor) => {
+const renderArticle = (id, carsName, carsColor) => {
     const article = new Article(id, carsName, carsColor);
     article.generateArticle();
+};
+export const renderArticleAll = async () => {
+    const articlesWrapper = document.querySelector('.articles-wrapper');
+    if (articlesWrapper)
+        articlesWrapper.innerHTML = '';
+    const serverData = await getCars([{ key: QUERYPARAMS.PAGE, value: 1 }, { key: QUERYPARAMS.LIMIT, value: 200 }]);
+    serverData.data.forEach(car => {
+        car.id && car.name && car.color && renderArticle(car.id, car.name, car.color);
+    });
+    addArticleBtnHandlers();
 };

@@ -3,6 +3,7 @@ import {stateType } from "./types/types";
 export const DATABASE = 'database'
 
 export let state: stateType = {
+  id: null,
   carsNum: 0,
   pageNum: 1,
 

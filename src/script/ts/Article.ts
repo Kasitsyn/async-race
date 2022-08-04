@@ -1,3 +1,6 @@
+import { deleteCar } from "./API.js";
+import { renderArticleAll } from "./app.js";
+import { state } from "./Store.js";
 import { IArticle } from "./types/types";
 
 export class Article implements IArticle {
@@ -19,10 +22,10 @@ export class Article implements IArticle {
     const articlesWrapper = document.querySelector<HTMLDivElement>('.articles-wrapper')
 
     let template = `
-    <article class="article data-id=${this.id}">
+    <article class="article ">
       <header class="article__header">
-        <button class="btn article__btn" id="select-btn">Select</button>
-        <button class="btn article__btn" id="remove-btn">Remove</button>
+        <button class="btn article__btn" id="select-btn" data-id=${this.id}>Select</button>
+        <button class="btn article__btn" id="remove-btn" data-id=${this.id}>Remove</button>
         <span class="article__title" id="article-title">${this.name}</span>
       </header>
       <div class="controls">
@@ -30,10 +33,8 @@ export class Article implements IArticle {
         <button class="control__btn control__btn--break" id="break-btn">B</button>
       </div>
       <div class="racing">  
-        <svg width="100" height="50" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-labelledby="title"
+        <svg width="100" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" aria-labelledby="title"
           aria-describedby="desc" role="img" xmlns:xlink="http://www.w3.org/1999/xlink">
-          <title>Station Wagon</title>
-          <desc>A line styled icon from Orion Icon Library.</desc>
           <path stroke-width="2"
           stroke-linejoin="round" stroke-linecap="round" stroke="#202020" fill=${this.color}
           d="M9.011 41H3s.023-4.814.368-8.32a37.433 37.433 0 0 1 4.369-12.12A3.908 3.908 0 0 1 10.444 19H36.27l8.856 8s10.722 1.5 13.688 1.728c3.454.271 3.176 2.894 3.176 2.894s-.364 3.917-.624 5.841S60.047 41 58.357 41H55m-12 0H21.011m24.131-14.006H4.867"
@@ -48,6 +49,45 @@ export class Article implements IArticle {
      </article>
     `
     if (articlesWrapper) articlesWrapper.innerHTML += template;
-
   }
 }
+
+
+
+export const addArticleBtnHandlers = () => {
+
+  const UIArticle = {
+    selectBtnAll: document.querySelectorAll<HTMLButtonElement>('#select-btn'),
+    removeBtnAll: document.querySelectorAll<HTMLButtonElement>('#remove-btn'),
+    title: document.querySelector<HTMLHeadingElement>('#article-title'),
+    startBtn: document.querySelector<HTMLButtonElement>('#start-btn'),
+    breakBtn: document.querySelector<HTMLButtonElement>('#break-btn'),
+    carImg: document.querySelector<HTMLImageElement>('#car-img'),
+    flagImg: document.querySelector<HTMLImageElement>('#flag-img')
+  }
+
+  const saveId = (e: Event) => {
+    const target = e.target as HTMLButtonElement
+    if (target.dataset.id) {
+      state.id = +target.dataset.id
+    }
+
+  }
+
+  UIArticle.selectBtnAll?.forEach((el) => el.addEventListener('click', async (e) => {
+    saveId(e)
+    
+  }))
+
+  UIArticle.removeBtnAll?.forEach(el => el.addEventListener('click', async (e) => {
+    saveId(e)
+    await deleteCar(state.id).then(() => {
+      console.log(state.id)
+      renderArticleAll()
+    })
+
+  }))
+}
+
+
+

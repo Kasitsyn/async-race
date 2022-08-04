@@ -1,5 +1,6 @@
 export const DATABASE = 'database';
 export let state = {
+    id: null,
     carsNum: 0,
     pageNum: 1,
     color: null,

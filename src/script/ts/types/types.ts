@@ -5,6 +5,7 @@ export interface IArticle {
 }
 
 export type stateType = {
+  id: number | null;
   cars: ICar[] | null;
   winners: winner[] | null;
   currentWinner: winner | null;
