@@ -1,3 +1,7 @@
+export const QUERYPARAMS = {
+    PAGE: '_page',
+    LIMIT: '_limit'
+};
 const baseUrl = 'http://127.0.0.1:3000';
 const path = {
     garage: '/garage',
@@ -103,4 +107,3 @@ export const updateWinner = async (id, dataParams) => {
     const data = await response.json();
     return data;
 };
-console.log('ass');

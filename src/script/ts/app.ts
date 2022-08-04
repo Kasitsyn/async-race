@@ -1,6 +1,6 @@
-import { createCar, deleteCar, engineDrive, generateQueryString, getCar, getCars, updateCar, toggleEngine, getWinners, getWinner, createWinner, deleteWinner, updateWinner } from './API.js';
+import { createCar, deleteCar, engineDrive, generateQueryString, getCar, getCars, updateCar, toggleEngine, getWinners, getWinner, createWinner, deleteWinner, updateWinner, QUERYPARAMS } from './API.js';
 import { Article } from './Article.js';
-import { store } from './Store.js';
+import { DATABASE, initState, saveToLocalStorage, serverData, state } from './Store.js';
 import { ICar, winner } from './types/types.js';
 
 //================= DATA FOR TESTING =================
@@ -60,6 +60,8 @@ const UI = {
   }
 }
 
+initState()
+
 //================= GARAGE FORM =================
 
 const getColor = (e: Event): string => {
@@ -87,24 +89,52 @@ const addHeaderButtonsHandler = (): void => {
 }
 
 const addGarageFormsHandler = (): void => {
-  UI.form.colorInput?.addEventListener('change', (e) => store.color = getColor(e))
-  UI.form.colorInputUpdate?.addEventListener('change', (e) => store.color = getColor(e))
+  UI.form.colorInput?.addEventListener('change', (e) => {
+    state.color = getColor(e)
+    saveToLocalStorage(DATABASE, state)
+  })
+  UI.form.colorInputUpdate?.addEventListener('change', (e) => {
+    state.color = getColor(e)
+    saveToLocalStorage(DATABASE, state)
+  })
 
-  UI.form.formCreate?.addEventListener('input', (e) => store.name = getName(e))
-  UI.form.formUpdate?.addEventListener('input', (e) => {store.name = getName(e)})
+  UI.form.nameInput?.addEventListener('change', (e) => {
+    state.name = getName(e)
+    saveToLocalStorage(DATABASE, state)
+  })
+  UI.form.formUpdate?.addEventListener('change', (e) => {
+    state.name = getName(e)
+    saveToLocalStorage(DATABASE, state)
+  })
+  UI.form.createBtn?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const name = state.name
+    const color = state.color
+    await createCar({ name, color })
+    const serverData = await getCars([{ key: QUERYPARAMS.PAGE, value: 1 }, { key: QUERYPARAMS.LIMIT, value: 100 }])
+    serverData.data.forEach(car => {
+      car.id && car.name && car.color && renderArticles(car.id, car.name, car.color)
+      
+    })
+  })
 }
 
 addHeaderButtonsHandler()
 addGarageFormsHandler()
 
+//================= CREATE CAR =================
+
+
+
 //================= RENDER =================
 
-const renderArticle = (): void => {
-  const article = new Article(0, 'ass', 'black');
+const renderArticles = (id: number, carsName: string, carsColor: string): void => {
+  const article = new Article(id, carsName, carsColor);
   article.generateArticle();
 }
 
-renderArticle();
+
+
 
 
 

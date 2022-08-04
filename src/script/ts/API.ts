@@ -1,4 +1,9 @@
-import { carData, engine, engineStatus, ICar, queryParams, winner } from "./types/types";
+import {constantQueryParams, engine, engineStatus, ICar, queryParams, winner } from "./types/types";
+
+export const QUERYPARAMS: constantQueryParams = {
+  PAGE: '_page',
+  LIMIT: '_limit'
+}
 
 const baseUrl: string = 'http://127.0.0.1:3000'
 const path: {
@@ -25,7 +30,7 @@ export const getCars = async (queryParams: queryParams[]): Promise<{data: ICar[]
   return {data, count}
 }
 
-export const getCar = async (id: number): Promise<ICar> => {
+export const getCar = async (id: number | null): Promise<ICar> => {
   const response = await fetch(`${baseUrl}${path.garage}/${id}`)
   const data = await response.json()
   return data
@@ -44,7 +49,7 @@ export const createCar = async (dataParams: ICar): Promise<ICar> => {
   return data
 }
 
-export const deleteCar = async (id: number): Promise<{}> => {
+export const deleteCar = async (id: number | null): Promise<{}> => {
   const response = await fetch(`${baseUrl}${path.garage}/${id}`, {
     method: 'DELETE'
   })
@@ -53,7 +58,7 @@ export const deleteCar = async (id: number): Promise<{}> => {
   return data
 }
 
-export const updateCar = async (id: number, dataParams: carData): Promise<ICar> => {
+export const updateCar = async (id: number | null, dataParams: ICar): Promise<ICar> => {
   const response = await fetch(`${baseUrl}${path.garage}/${id}`, {
     method: 'PATCH',
     headers: {
@@ -97,7 +102,7 @@ export const getWinners = async (queryParams: queryParams[]): Promise<{ data: wi
   return { data, count }
 }
 
-export const getWinner = async (id: number): Promise<winner> => {
+export const getWinner = async (id: number | null): Promise<winner> => {
   const response = await fetch(`${baseUrl}${path.winners}/${id}`)
   const data = await response.json()
   return data
@@ -116,7 +121,7 @@ export const createWinner = async (dataParams: winner): Promise<winner> => {
   return data
 }
 
-export const deleteWinner = async (id: number): Promise<{}> => {
+export const deleteWinner = async (id: number | null): Promise<{}> => {
   const response = await fetch(`${baseUrl}${path.garage}/${id}`, {
     method: 'DELETE'
   })
@@ -125,7 +130,7 @@ export const deleteWinner = async (id: number): Promise<{}> => {
   return data
 }
 
-export const updateWinner = async (id: number, dataParams: winner): Promise<winner | {}> => {
+export const updateWinner = async (id: number | null, dataParams: winner): Promise<winner | {}> => {
   const response = await fetch(`${baseUrl}${path.winners}/${id}`, {
     method: 'PUT',
     headers: {
@@ -138,4 +143,3 @@ export const updateWinner = async (id: number, dataParams: winner): Promise<winn
   return data
 }
 
-console.log('ass')

@@ -1,5 +1,6 @@
+import { createCar, getCars, QUERYPARAMS } from './API.js';
 import { Article } from './Article.js';
-import { store } from './Store.js';
+import { DATABASE, initState, saveToLocalStorage, state } from './Store.js';
 //================= DATA FOR TESTING =================
 const car = {
     name: 'ass',
@@ -54,6 +55,7 @@ const UI = {
         pageNumWinners: document.querySelector('#page-num-winners')
     }
 };
+initState();
 //================= GARAGE FORM =================
 const getColor = (e) => {
     return e.target.value;
@@ -76,17 +78,39 @@ const addHeaderButtonsHandler = () => {
     });
 };
 const addGarageFormsHandler = () => {
-    var _a, _b, _c, _d;
-    (_a = UI.form.colorInput) === null || _a === void 0 ? void 0 : _a.addEventListener('change', (e) => store.color = getColor(e));
-    (_b = UI.form.colorInputUpdate) === null || _b === void 0 ? void 0 : _b.addEventListener('change', (e) => store.color = getColor(e));
-    (_c = UI.form.formCreate) === null || _c === void 0 ? void 0 : _c.addEventListener('input', (e) => store.name = getName(e));
-    (_d = UI.form.formUpdate) === null || _d === void 0 ? void 0 : _d.addEventListener('input', (e) => { store.name = getName(e); });
+    var _a, _b, _c, _d, _e;
+    (_a = UI.form.colorInput) === null || _a === void 0 ? void 0 : _a.addEventListener('change', (e) => {
+        state.color = getColor(e);
+        saveToLocalStorage(DATABASE, state);
+    });
+    (_b = UI.form.colorInputUpdate) === null || _b === void 0 ? void 0 : _b.addEventListener('change', (e) => {
+        state.color = getColor(e);
+        saveToLocalStorage(DATABASE, state);
+    });
+    (_c = UI.form.nameInput) === null || _c === void 0 ? void 0 : _c.addEventListener('change', (e) => {
+        state.name = getName(e);
+        saveToLocalStorage(DATABASE, state);
+    });
+    (_d = UI.form.formUpdate) === null || _d === void 0 ? void 0 : _d.addEventListener('change', (e) => {
+        state.name = getName(e);
+        saveToLocalStorage(DATABASE, state);
+    });
+    (_e = UI.form.createBtn) === null || _e === void 0 ? void 0 : _e.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const name = state.name;
+        const color = state.color;
+        await createCar({ name, color });
+        const serverData = await getCars([{ key: QUERYPARAMS.PAGE, value: 1 }, { key: QUERYPARAMS.LIMIT, value: 100 }]);
+        serverData.data.forEach(car => {
+            car.id && car.name && car.color && renderArticles(car.id, car.name, car.color);
+        });
+    });
 };
 addHeaderButtonsHandler();
 addGarageFormsHandler();
+//================= CREATE CAR =================
 //================= RENDER =================
-const renderArticle = () => {
-    const article = new Article(0, 'ass', 'black');
+const renderArticles = (id, carsName, carsColor) => {
+    const article = new Article(id, carsName, carsColor);
     article.generateArticle();
 };
-renderArticle();
