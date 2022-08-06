@@ -1,6 +1,3 @@
-import { deleteCar } from "./API.js";
-import { renderArticleAll } from "./app.js";
-import { state } from "./Store.js";
 export class Article {
     constructor(id, name, color) {
         this.id = id;
@@ -40,31 +37,3 @@ export class Article {
             articlesWrapper.innerHTML += template;
     }
 }
-export const addArticleBtnHandlers = () => {
-    var _a, _b;
-    const UIArticle = {
-        selectBtnAll: document.querySelectorAll('#select-btn'),
-        removeBtnAll: document.querySelectorAll('#remove-btn'),
-        title: document.querySelector('#article-title'),
-        startBtn: document.querySelector('#start-btn'),
-        breakBtn: document.querySelector('#break-btn'),
-        carImg: document.querySelector('#car-img'),
-        flagImg: document.querySelector('#flag-img')
-    };
-    const saveId = (e) => {
-        const target = e.target;
-        if (target.dataset.id) {
-            state.id = +target.dataset.id;
-        }
-    };
-    (_a = UIArticle.selectBtnAll) === null || _a === void 0 ? void 0 : _a.forEach((el) => el.addEventListener('click', async (e) => {
-        saveId(e);
-    }));
-    (_b = UIArticle.removeBtnAll) === null || _b === void 0 ? void 0 : _b.forEach(el => el.addEventListener('click', async (e) => {
-        saveId(e);
-        await deleteCar(state.id).then(() => {
-            console.log(state.id);
-            renderArticleAll();
-        });
-    }));
-};

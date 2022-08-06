@@ -1,6 +1,8 @@
 export const QUERYPARAMS = {
-    PAGE: '_page',
-    LIMIT: '_limit',
+    page: '_page',
+    pageValue: 1,
+    limit: '_limit',
+    limitValue: 7
 };
 const baseUrl = 'http://127.0.0.1:3000';
 const path = {

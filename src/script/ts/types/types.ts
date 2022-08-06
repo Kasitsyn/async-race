@@ -9,12 +9,10 @@ export type stateType = {
   cars: ICar[] | null;
   winners: winner[] | null;
   currentWinner: winner | null;
-  numOfCars: number | null;
-  numOfWinners: number | null;
-
-  carsNum: number;
-  pageNum: number;
-
+  carsAmount: number | null;
+  winnersAmount: number | null;
+  currentPage: number;
+  pageAmount: number | null;
   color: string | null;
   name: string | null;
 }
@@ -43,6 +41,8 @@ export type winner = {
 }
 
 export type constantQueryParams = {
-  PAGE: string;
-  LIMIT: string;
+  page: string;
+  pageValue: number;
+  limit: string;
+  limitValue: number;
 }

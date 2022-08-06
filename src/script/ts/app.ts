@@ -1,6 +1,6 @@
 import { createCar, deleteCar, engineDrive, generateQueryString, getCar, getCars, updateCar, toggleEngine, getWinners, getWinner, createWinner, deleteWinner, updateWinner, QUERYPARAMS } from './API.js';
-import { addArticleBtnHandlers, Article } from './Article.js';
-import { DATABASE, initState, saveToLocalStorage, serverData, state } from './Store.js';
+import { Article } from './Article.js';
+import { DATABASE, initState, saveToLocalStorage, state } from './Store.js';
 import { ICar, winner } from './types/types.js';
 
 //================= DATA FOR TESTING =================
@@ -111,19 +111,59 @@ const addGarageFormsHandler = (): void => {
     const name = state.name
     const color = state.color
     await createCar({ name, color })
-    await renderArticleAll()
-    
+    await renderArticleAll(QUERYPARAMS.pageValue)
+  })
+}
+
+export const addArticleHandlers = () => {
+
+  const UIArticle = {
+    selectBtnAll: document.querySelectorAll<HTMLButtonElement>('#select-btn'),
+    removeBtnAll: document.querySelectorAll<HTMLButtonElement>('#remove-btn'),
+    title: document.querySelector<HTMLHeadingElement>('#article-title'),
+    startBtn: document.querySelector<HTMLButtonElement>('#start-btn'),
+    breakBtn: document.querySelector<HTMLButtonElement>('#break-btn'),
+    carImg: document.querySelector<HTMLImageElement>('#car-img'),
+    flagImg: document.querySelector<HTMLImageElement>('#flag-img')
+  }
+
+  const saveId = (e: Event) => {
+    const target = e.target as HTMLButtonElement
+    if (target.dataset.id) {
+      state.id = +target.dataset.id
+    }
+
+  }
+
+  UIArticle.selectBtnAll?.forEach((el) => el.addEventListener('click', async (e) => {
+    saveId(e)
+
+  }))
+
+  UIArticle.removeBtnAll?.forEach(el => el.addEventListener('click', async (e) => {
+    saveId(e)
+    await deleteCar(state.id).then(() => {
+      console.log(state.id)
+      renderArticleAll(QUERYPARAMS.pageValue)
+    })
+  }))
+}
+
+export const addFooterHandlers = () => {
+  UI.footer.nextBtn?.addEventListener('click', (e) => {
+    QUERYPARAMS.pageValue++
+    renderArticleAll(QUERYPARAMS.pageValue)
   })
 
+  UI.footer.prevBtn?.addEventListener('click', (e) => {
+    QUERYPARAMS.pageValue--
+    renderArticleAll(QUERYPARAMS.pageValue)
+  })
 }
 
 addHeaderButtonsHandler()
 addGarageFormsHandler()
-
-
-//================= CREATE CAR =================
-
-
+addFooterHandlers()
 
 //================= RENDER =================
 
@@ -133,15 +173,46 @@ const renderArticle = (id: number, carsName: string, carsColor: string): void =>
 
 }
 
-export const renderArticleAll = async () => {
+export const renderArticleAll = async (page: number) => {
   const articlesWrapper = document.querySelector<HTMLDivElement>('.articles-wrapper')
-  if (articlesWrapper) articlesWrapper.innerHTML ='';
-  const serverData = await getCars([{ key: QUERYPARAMS.PAGE, value: 1 }, { key: QUERYPARAMS.LIMIT, value: 200 }])
+  if (articlesWrapper) articlesWrapper.innerHTML = '';
+  const serverData = await getCars([{ key: QUERYPARAMS.page, value: page }, { key: QUERYPARAMS.limit, value: QUERYPARAMS.limitValue }])
   serverData.data.forEach(car => {
     car.id && car.name && car.color && renderArticle(car.id, car.name, car.color)
   })
-  addArticleBtnHandlers()
+  state.carsAmount = serverData.count
+  renderCarsNumber()
+  addArticleHandlers()
+  savePageAmount()
 }
+
+export const renderCarsNumber = () => {
+  UI.garage.carsNum && state.carsAmount !== null
+    ? (UI.garage.carsNum.innerText = `${state.carsAmount}`)
+    : ''
+}
+
+export const renderPageNumber = () => {
+  console.log(state.currentPage)
+  UI.garage.pageNumGarage && state.currentPage !== null
+    ? (UI.garage.pageNumGarage.innerText = `${state.currentPage}`)
+    : ''
+}
+
+const savePageAmount = () => {
+  state.pageAmount = state.carsAmount
+    ? Math.ceil(state.carsAmount / QUERYPARAMS.limitValue)
+    : 1
+  console.log(state.carsAmount, QUERYPARAMS.limitValue, state.pageAmount)
+}
+
+// const saveCurrentPage = () => {
+//   state.currentPage = 
+// }
+renderCarsNumber()
+renderPageNumber()
+renderArticleAll(QUERYPARAMS.pageValue)
+
 
 
 

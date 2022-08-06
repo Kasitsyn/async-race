@@ -54,40 +54,7 @@ export class Article implements IArticle {
 
 
 
-export const addArticleBtnHandlers = () => {
 
-  const UIArticle = {
-    selectBtnAll: document.querySelectorAll<HTMLButtonElement>('#select-btn'),
-    removeBtnAll: document.querySelectorAll<HTMLButtonElement>('#remove-btn'),
-    title: document.querySelector<HTMLHeadingElement>('#article-title'),
-    startBtn: document.querySelector<HTMLButtonElement>('#start-btn'),
-    breakBtn: document.querySelector<HTMLButtonElement>('#break-btn'),
-    carImg: document.querySelector<HTMLImageElement>('#car-img'),
-    flagImg: document.querySelector<HTMLImageElement>('#flag-img')
-  }
-
-  const saveId = (e: Event) => {
-    const target = e.target as HTMLButtonElement
-    if (target.dataset.id) {
-      state.id = +target.dataset.id
-    }
-
-  }
-
-  UIArticle.selectBtnAll?.forEach((el) => el.addEventListener('click', async (e) => {
-    saveId(e)
-    
-  }))
-
-  UIArticle.removeBtnAll?.forEach(el => el.addEventListener('click', async (e) => {
-    saveId(e)
-    await deleteCar(state.id).then(() => {
-      console.log(state.id)
-      renderArticleAll()
-    })
-
-  }))
-}
 
 
 

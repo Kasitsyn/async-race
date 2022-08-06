@@ -1,5 +1,5 @@
-import { createCar, getCars, QUERYPARAMS } from './API.js';
-import { addArticleBtnHandlers, Article } from './Article.js';
+import { createCar, deleteCar, getCars, QUERYPARAMS } from './API.js';
+import { Article } from './Article.js';
 import { DATABASE, initState, saveToLocalStorage, state } from './Store.js';
 //================= DATA FOR TESTING =================
 const car = {
@@ -100,24 +100,89 @@ const addGarageFormsHandler = () => {
         const name = state.name;
         const color = state.color;
         await createCar({ name, color });
-        await renderArticleAll();
+        await renderArticleAll(QUERYPARAMS.pageValue);
+    });
+};
+export const addArticleHandlers = () => {
+    var _a, _b;
+    const UIArticle = {
+        selectBtnAll: document.querySelectorAll('#select-btn'),
+        removeBtnAll: document.querySelectorAll('#remove-btn'),
+        title: document.querySelector('#article-title'),
+        startBtn: document.querySelector('#start-btn'),
+        breakBtn: document.querySelector('#break-btn'),
+        carImg: document.querySelector('#car-img'),
+        flagImg: document.querySelector('#flag-img')
+    };
+    const saveId = (e) => {
+        const target = e.target;
+        if (target.dataset.id) {
+            state.id = +target.dataset.id;
+        }
+    };
+    (_a = UIArticle.selectBtnAll) === null || _a === void 0 ? void 0 : _a.forEach((el) => el.addEventListener('click', async (e) => {
+        saveId(e);
+    }));
+    (_b = UIArticle.removeBtnAll) === null || _b === void 0 ? void 0 : _b.forEach(el => el.addEventListener('click', async (e) => {
+        saveId(e);
+        await deleteCar(state.id).then(() => {
+            console.log(state.id);
+            renderArticleAll(QUERYPARAMS.pageValue);
+        });
+    }));
+};
+export const addFooterHandlers = () => {
+    var _a, _b;
+    (_a = UI.footer.nextBtn) === null || _a === void 0 ? void 0 : _a.addEventListener('click', (e) => {
+        QUERYPARAMS.pageValue++;
+        renderArticleAll(QUERYPARAMS.pageValue);
+    });
+    (_b = UI.footer.prevBtn) === null || _b === void 0 ? void 0 : _b.addEventListener('click', (e) => {
+        QUERYPARAMS.pageValue--;
+        renderArticleAll(QUERYPARAMS.pageValue);
     });
 };
 addHeaderButtonsHandler();
 addGarageFormsHandler();
-//================= CREATE CAR =================
+addFooterHandlers();
 //================= RENDER =================
 const renderArticle = (id, carsName, carsColor) => {
     const article = new Article(id, carsName, carsColor);
     article.generateArticle();
 };
-export const renderArticleAll = async () => {
+export const renderArticleAll = async (page) => {
     const articlesWrapper = document.querySelector('.articles-wrapper');
     if (articlesWrapper)
         articlesWrapper.innerHTML = '';
-    const serverData = await getCars([{ key: QUERYPARAMS.PAGE, value: 1 }, { key: QUERYPARAMS.LIMIT, value: 200 }]);
+    const serverData = await getCars([{ key: QUERYPARAMS.page, value: page }, { key: QUERYPARAMS.limit, value: QUERYPARAMS.limitValue }]);
     serverData.data.forEach(car => {
         car.id && car.name && car.color && renderArticle(car.id, car.name, car.color);
     });
-    addArticleBtnHandlers();
+    state.carsAmount = serverData.count;
+    renderCarsNumber();
+    addArticleHandlers();
+    savePageAmount();
 };
+export const renderCarsNumber = () => {
+    UI.garage.carsNum && state.carsAmount !== null
+        ? (UI.garage.carsNum.innerText = `${state.carsAmount}`)
+        : '';
+};
+export const renderPageNumber = () => {
+    console.log(state.currentPage);
+    UI.garage.pageNumGarage && state.currentPage !== null
+        ? (UI.garage.pageNumGarage.innerText = `${state.currentPage}`)
+        : '';
+};
+const savePageAmount = () => {
+    state.pageAmount = state.carsAmount
+        ? Math.ceil(state.carsAmount / QUERYPARAMS.limitValue)
+        : 1;
+    console.log(state.carsAmount, QUERYPARAMS.limitValue, state.pageAmount);
+};
+// const saveCurrentPage = () => {
+//   state.currentPage = 
+// }
+renderCarsNumber();
+renderPageNumber();
+renderArticleAll(QUERYPARAMS.pageValue);

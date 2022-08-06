@@ -1,8 +1,10 @@
 import { constantQueryParams, engine, engineStatus, ICar, queryParams, winner } from "./types/types";
 
 export const QUERYPARAMS: constantQueryParams = {
-  PAGE: '_page',
-  LIMIT: '_limit',
+  page: '_page',
+  pageValue: 1,
+  limit: '_limit',
+  limitValue: 7
 }
 
 const baseUrl: string = 'http://127.0.0.1:3000'

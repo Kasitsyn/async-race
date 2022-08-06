@@ -70,9 +70,10 @@
 .control__btn--break {
 }
 .racing {
-  border-bottom: 1px dashed black;
+  border-bottom: 4px solid black;
   display: flex;
   justify-content: space-between ;
+  margin-bottom: 10px;
 }
 
 .racing:last-child {
