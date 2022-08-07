@@ -11,6 +11,7 @@ export let state = {
     carsAmount: null,
     winnersAmount: null
 };
+export const nameCars = ['Tesla', 'Toyota', 'BMW', 'Mercedes', 'Porsche', 'Lexus', 'Ferrari', 'Lada', 'Subaru', 'Mazda'];
 export const initState = () => {
     if (localStorage.database) {
         const stateFromLocalStorage = JSON.parse(localStorage.getItem(DATABASE) || '{}');

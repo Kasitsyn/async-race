@@ -1,15 +1,7 @@
 import { createCar, deleteCar, getCars, QUERYPARAMS } from './API.js';
 import { Article } from './Article.js';
-import { DATABASE, initState, saveToLocalStorage, state } from './Store.js';
+import { DATABASE, initState, nameCars, saveToLocalStorage, state } from './Store.js';
 //================= DATA FOR TESTING =================
-const car = {
-    name: 'ass',
-    color: '#ffffff',
-};
-const winner = {
-    wins: 12221,
-    time: 2.92
-};
 //================= UI =================
 const UI = {
     header: {
@@ -36,15 +28,6 @@ const UI = {
         carsNum: document.querySelector('#cars-num-garage'),
         pageNumGarage: document.querySelector('#page-num-garage'),
     },
-    // article: {
-    //   selectBtn: document.querySelector<HTMLButtonElement>('#select-btn'),
-    //   removeBtn: document.querySelector<HTMLButtonElement>('#remove-btn'),
-    //   title: document.querySelector<HTMLHeadingElement>('#article-title'),
-    //   startBtn: document.querySelector<HTMLButtonElement>('#start-btn'),
-    //   breakBtn: document.querySelector<HTMLButtonElement>('#break-btn'),
-    //   carImg: document.querySelector<HTMLImageElement>('#car-img'),
-    //   flagImg: document.querySelector<HTMLImageElement>('#flag-img'),
-    // },
     footer: {
         prevBtn: document.querySelector('#prev-btn'),
         nextBtn: document.querySelector('#next-btn')
@@ -64,7 +47,7 @@ const getName = (e) => {
     return e.target.value;
 };
 //================= HANDLERS =================
-const addHeaderButtonsHandler = () => {
+export const addHeaderButtonsHandler = () => {
     var _a, _b;
     (_a = UI.header.toWinnersBtn) === null || _a === void 0 ? void 0 : _a.addEventListener('click', (e) => {
         var _a, _b;
@@ -77,7 +60,7 @@ const addHeaderButtonsHandler = () => {
         (_b = UI.garage.garageSection) === null || _b === void 0 ? void 0 : _b.classList.remove('visually-hidden');
     });
 };
-const addGarageFormsHandler = () => {
+export const addGarageFormsHandler = () => {
     var _a, _b, _c, _d, _e;
     (_a = UI.form.colorInput) === null || _a === void 0 ? void 0 : _a.addEventListener('change', (e) => {
         state.color = getColor(e);
@@ -101,6 +84,17 @@ const addGarageFormsHandler = () => {
         const color = state.color;
         await createCar({ name, color });
         await renderArticleAll(QUERYPARAMS.pageValue);
+    });
+};
+export const addMenuHandler = () => {
+    var _a;
+    (_a = UI.menu.generateCarsBtn) === null || _a === void 0 ? void 0 : _a.addEventListener('click', async (e) => {
+        const cars = generateManyCars(10);
+        const carsPromises = [];
+        cars.forEach((car) => {
+            carsPromises.push(createCar(Object.assign({}, car)));
+        });
+        await Promise.all(carsPromises).then(() => renderArticleAll(QUERYPARAMS.pageValue));
     });
 };
 export const addArticleHandlers = () => {
@@ -134,17 +128,22 @@ export const addArticleHandlers = () => {
 export const addFooterHandlers = () => {
     var _a, _b;
     (_a = UI.footer.nextBtn) === null || _a === void 0 ? void 0 : _a.addEventListener('click', async (e) => {
+        var _a;
         QUERYPARAMS.pageValue++;
         await renderArticleAll(QUERYPARAMS.pageValue);
+        (_a = UI.footer.nextBtn) === null || _a === void 0 ? void 0 : _a.scrollIntoView();
     });
-    (_b = UI.footer.prevBtn) === null || _b === void 0 ? void 0 : _b.addEventListener('click', (e) => {
+    (_b = UI.footer.prevBtn) === null || _b === void 0 ? void 0 : _b.addEventListener('click', async (e) => {
+        var _a;
         QUERYPARAMS.pageValue--;
-        renderArticleAll(QUERYPARAMS.pageValue);
+        await renderArticleAll(QUERYPARAMS.pageValue);
+        (_a = UI.footer.prevBtn) === null || _a === void 0 ? void 0 : _a.scrollIntoView();
     });
 };
 addHeaderButtonsHandler();
 addGarageFormsHandler();
 addFooterHandlers();
+addMenuHandler();
 //================= RENDER =================
 const renderArticle = (id, carsName, carsColor) => {
     const article = new Article(id, carsName, carsColor);
@@ -191,6 +190,16 @@ export const savePageAmount = () => {
     saveToLocalStorage(DATABASE, state);
     console.log(QUERYPARAMS.pageValue, state.carsAmount, QUERYPARAMS.limitValue, state.pageAmount);
 };
+export const generateManyCars = (amount) => {
+    const cars = [];
+    for (let i = 0; i < amount; i++) {
+        const name = nameCars[Math.floor(Math.random() * 10)];
+        const color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+        cars.push({ name, color });
+    }
+    return cars;
+};
 renderCarsNumber();
 renderPageNumber();
 renderArticleAll(QUERYPARAMS.pageValue);
+console.log(generateManyCars(10));

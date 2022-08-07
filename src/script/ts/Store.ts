@@ -15,15 +15,20 @@ export let state: stateType = {
   winnersAmount: null
 }
 
+export const nameCars: string[] = ['Tesla', 'Toyota', 'BMW', 'Mercedes', 'Porsche', 'Lexus', 'Ferrari', 'Lada', 'Subaru', 'Mazda']
+
+
+
 export const initState = () => {
   if (localStorage.database) {
     const stateFromLocalStorage = JSON.parse(localStorage.getItem(DATABASE) || '{}')
     state = { ...stateFromLocalStorage }
   }
-
   saveToLocalStorage(DATABASE, state)
 }
 
 export const saveToLocalStorage = (key: string, value: stateType) => {
   localStorage.setItem(key, JSON.stringify(value))
 }
+
+

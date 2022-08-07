@@ -1,18 +1,9 @@
 import { createCar, deleteCar, engineDrive, generateQueryString, getCar, getCars, updateCar, toggleEngine, getWinners, getWinner, createWinner, deleteWinner, updateWinner, QUERYPARAMS } from './API.js';
 import { Article } from './Article.js';
-import { DATABASE, initState, saveToLocalStorage, state } from './Store.js';
+import { DATABASE, initState, nameCars, saveToLocalStorage, state } from './Store.js';
 import { ICar, winner } from './types/types.js';
 
 //================= DATA FOR TESTING =================
-const car: ICar = {
-  name: 'ass',
-  color: '#ffffff',
-}
-
-const winner: winner = {
-  wins: 12221,
-  time: 2.92
-}
 
 //================= UI =================
 const UI = {
@@ -40,15 +31,6 @@ const UI = {
     carsNum: document.querySelector<HTMLSpanElement>('#cars-num-garage'),
     pageNumGarage: document.querySelector<HTMLSpanElement>('#page-num-garage'),
   },
-  // article: {
-  //   selectBtn: document.querySelector<HTMLButtonElement>('#select-btn'),
-  //   removeBtn: document.querySelector<HTMLButtonElement>('#remove-btn'),
-  //   title: document.querySelector<HTMLHeadingElement>('#article-title'),
-  //   startBtn: document.querySelector<HTMLButtonElement>('#start-btn'),
-  //   breakBtn: document.querySelector<HTMLButtonElement>('#break-btn'),
-  //   carImg: document.querySelector<HTMLImageElement>('#car-img'),
-  //   flagImg: document.querySelector<HTMLImageElement>('#flag-img'),
-  // },
   footer: {
     prevBtn: document.querySelector<HTMLButtonElement>('#prev-btn'),
     nextBtn: document.querySelector<HTMLButtonElement>('#next-btn')
@@ -76,7 +58,7 @@ const getName = (e: Event): string => {
 //================= HANDLERS =================
 
 
-const addHeaderButtonsHandler = (): void => {
+export const addHeaderButtonsHandler = (): void => {
   UI.header.toWinnersBtn?.addEventListener('click', (e) => {
     UI.garage.garageSection?.classList.add('visually-hidden')
     UI.winners.winnersSection?.classList.remove('visually-hidden')
@@ -88,7 +70,7 @@ const addHeaderButtonsHandler = (): void => {
   })
 }
 
-const addGarageFormsHandler = (): void => {
+export const addGarageFormsHandler = (): void => {
   UI.form.colorInput?.addEventListener('change', (e) => {
     state.color = getColor(e)
     saveToLocalStorage(DATABASE, state)
@@ -115,7 +97,19 @@ const addGarageFormsHandler = (): void => {
   })
 }
 
-export const addArticleHandlers = () => {
+export const addMenuHandler = () => {
+  UI.menu.generateCarsBtn?.addEventListener('click', async (e) => {
+    const cars = generateManyCars(10)
+    const carsPromises: Promise<ICar>[] = []
+    cars.forEach((car: ICar) => {
+      carsPromises.push(createCar({ ...car }))
+    })
+    await Promise.all(carsPromises).then(() => renderArticleAll(QUERYPARAMS.pageValue))
+
+  })
+}
+
+export const addArticleHandlers = (): void => {
 
   const UIArticle = {
     selectBtnAll: document.querySelectorAll<HTMLButtonElement>('#select-btn'),
@@ -149,38 +143,42 @@ export const addArticleHandlers = () => {
   }))
 }
 
-export const addFooterHandlers = () => {
+export const addFooterHandlers = (): void => {
   UI.footer.nextBtn?.addEventListener('click', async (e) => {
     QUERYPARAMS.pageValue++
     await renderArticleAll(QUERYPARAMS.pageValue)
+    UI.footer.nextBtn?.scrollIntoView()
   })
 
-  UI.footer.prevBtn?.addEventListener('click', (e) => {
+  UI.footer.prevBtn?.addEventListener('click', async (e) => {
     QUERYPARAMS.pageValue--
-    renderArticleAll(QUERYPARAMS.pageValue)
+    await renderArticleAll(QUERYPARAMS.pageValue)
+    UI.footer.prevBtn?.scrollIntoView()
   })
 }
 
 addHeaderButtonsHandler()
 addGarageFormsHandler()
 addFooterHandlers()
+addMenuHandler()
 
 //================= RENDER =================
 
 const renderArticle = (id: number, carsName: string, carsColor: string): void => {
   const article = new Article(id, carsName, carsColor);
   article.generateArticle();
-
 }
 
 export const renderArticleAll = async (page: number) => {
   const articlesWrapper = document.querySelector<HTMLDivElement>('.articles-wrapper')
   if (articlesWrapper) articlesWrapper.innerHTML = '';
+
   const serverData = await getCars([{ key: QUERYPARAMS.page, value: page }, { key: QUERYPARAMS.limit, value: QUERYPARAMS.limitValue }])
   serverData.data.forEach(car => {
     car.id && car.name && car.color && renderArticle(car.id, car.name, car.color)
   })
   state.carsAmount = serverData.count
+
   renderCarsNumber()
   addArticleHandlers()
   savePageAmount()
@@ -215,14 +213,28 @@ export const savePageAmount = () => {
   state.pageAmount = state.carsAmount
     ? Math.ceil(state.carsAmount / QUERYPARAMS.limitValue)
     : 1
-  saveToLocalStorage(DATABASE, state)  
+  saveToLocalStorage(DATABASE, state)
   console.log(QUERYPARAMS.pageValue, state.carsAmount, QUERYPARAMS.limitValue, state.pageAmount)
 }
+
+export const generateManyCars = (amount: number): ICar[] => {
+  const cars: ICar[] = []
+  for (let i = 0; i < amount; i++) {
+    const name: string = nameCars[Math.floor(Math.random() * 10)]
+    const color: string = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+
+    cars.push({ name, color })
+  }
+
+  return cars
+}
+
+
 
 renderCarsNumber()
 renderPageNumber()
 renderArticleAll(QUERYPARAMS.pageValue)
-
+console.log(generateManyCars(10))
 
 
 
