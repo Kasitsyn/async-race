@@ -2,6 +2,7 @@ export const DATABASE = 'database';
 export let state = {
     id: null,
     currentPage: 1,
+    pageAmount: 1,
     color: null,
     name: null,
     cars: null,

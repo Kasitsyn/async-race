@@ -12,7 +12,7 @@ export type stateType = {
   carsAmount: number | null;
   winnersAmount: number | null;
   currentPage: number;
-  pageAmount: number | null;
+  pageAmount: number;
   color: string | null;
   name: string | null;
 }

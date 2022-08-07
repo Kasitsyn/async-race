@@ -133,9 +133,9 @@ export const addArticleHandlers = () => {
 };
 export const addFooterHandlers = () => {
     var _a, _b;
-    (_a = UI.footer.nextBtn) === null || _a === void 0 ? void 0 : _a.addEventListener('click', (e) => {
+    (_a = UI.footer.nextBtn) === null || _a === void 0 ? void 0 : _a.addEventListener('click', async (e) => {
         QUERYPARAMS.pageValue++;
-        renderArticleAll(QUERYPARAMS.pageValue);
+        await renderArticleAll(QUERYPARAMS.pageValue);
     });
     (_b = UI.footer.prevBtn) === null || _b === void 0 ? void 0 : _b.addEventListener('click', (e) => {
         QUERYPARAMS.pageValue--;
@@ -162,6 +162,7 @@ export const renderArticleAll = async (page) => {
     renderCarsNumber();
     addArticleHandlers();
     savePageAmount();
+    renderFooterBtn();
 };
 export const renderCarsNumber = () => {
     UI.garage.carsNum && state.carsAmount !== null
@@ -169,20 +170,27 @@ export const renderCarsNumber = () => {
         : '';
 };
 export const renderPageNumber = () => {
-    console.log(state.currentPage);
     UI.garage.pageNumGarage && state.currentPage !== null
         ? (UI.garage.pageNumGarage.innerText = `${state.currentPage}`)
         : '';
 };
-const savePageAmount = () => {
+export const renderFooterBtn = () => {
+    var _a, _b, _c, _d;
+    QUERYPARAMS.pageValue >= state.pageAmount
+        ? (_a = UI.footer.nextBtn) === null || _a === void 0 ? void 0 : _a.setAttribute('disabled', 'true')
+        : (_b = UI.footer.nextBtn) === null || _b === void 0 ? void 0 : _b.removeAttribute('disabled');
+    QUERYPARAMS.pageValue === 1
+        ? (_c = UI.footer.prevBtn) === null || _c === void 0 ? void 0 : _c.setAttribute('disabled', 'true')
+        : (_d = UI.footer.prevBtn) === null || _d === void 0 ? void 0 : _d.removeAttribute('disabled');
+};
+//================= PAGE =================
+export const savePageAmount = () => {
     state.pageAmount = state.carsAmount
         ? Math.ceil(state.carsAmount / QUERYPARAMS.limitValue)
         : 1;
-    console.log(state.carsAmount, QUERYPARAMS.limitValue, state.pageAmount);
+    saveToLocalStorage(DATABASE, state);
+    console.log(QUERYPARAMS.pageValue, state.carsAmount, QUERYPARAMS.limitValue, state.pageAmount);
 };
-// const saveCurrentPage = () => {
-//   state.currentPage = 
-// }
 renderCarsNumber();
 renderPageNumber();
 renderArticleAll(QUERYPARAMS.pageValue);

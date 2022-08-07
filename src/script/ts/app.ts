@@ -150,9 +150,9 @@ export const addArticleHandlers = () => {
 }
 
 export const addFooterHandlers = () => {
-  UI.footer.nextBtn?.addEventListener('click', (e) => {
+  UI.footer.nextBtn?.addEventListener('click', async (e) => {
     QUERYPARAMS.pageValue++
-    renderArticleAll(QUERYPARAMS.pageValue)
+    await renderArticleAll(QUERYPARAMS.pageValue)
   })
 
   UI.footer.prevBtn?.addEventListener('click', (e) => {
@@ -184,6 +184,7 @@ export const renderArticleAll = async (page: number) => {
   renderCarsNumber()
   addArticleHandlers()
   savePageAmount()
+  renderFooterBtn()
 }
 
 export const renderCarsNumber = () => {
@@ -193,22 +194,31 @@ export const renderCarsNumber = () => {
 }
 
 export const renderPageNumber = () => {
-  console.log(state.currentPage)
   UI.garage.pageNumGarage && state.currentPage !== null
     ? (UI.garage.pageNumGarage.innerText = `${state.currentPage}`)
     : ''
 }
 
-const savePageAmount = () => {
+export const renderFooterBtn = () => {
+  QUERYPARAMS.pageValue >= state.pageAmount
+    ? UI.footer.nextBtn?.setAttribute('disabled', 'true')
+    : UI.footer.nextBtn?.removeAttribute('disabled')
+
+  QUERYPARAMS.pageValue === 1
+    ? UI.footer.prevBtn?.setAttribute('disabled', 'true')
+    : UI.footer.prevBtn?.removeAttribute('disabled')
+}
+
+//================= PAGE =================
+
+export const savePageAmount = () => {
   state.pageAmount = state.carsAmount
     ? Math.ceil(state.carsAmount / QUERYPARAMS.limitValue)
     : 1
-  console.log(state.carsAmount, QUERYPARAMS.limitValue, state.pageAmount)
+  saveToLocalStorage(DATABASE, state)  
+  console.log(QUERYPARAMS.pageValue, state.carsAmount, QUERYPARAMS.limitValue, state.pageAmount)
 }
 
-// const saveCurrentPage = () => {
-//   state.currentPage = 
-// }
 renderCarsNumber()
 renderPageNumber()
 renderArticleAll(QUERYPARAMS.pageValue)

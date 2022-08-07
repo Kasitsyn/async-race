@@ -5,7 +5,7 @@ export const DATABASE = 'database'
 export let state: stateType = {
   id: null,
   currentPage: 1,
-  pageAmount: null,
+  pageAmount: 1,
   color: null,
   name: null,
   cars: null,
