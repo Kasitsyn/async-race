@@ -32,7 +32,7 @@ export type engine = {
 
 export type queryParams = {
   key: string;
-  value: number | string;
+  value: number | string | null;
 }
 
 export type winner = {
@@ -41,6 +41,8 @@ export type winner = {
 }
 
 export type constantQueryParams = {
+  id: string;
+  status: 'started' | 'stopped';
   page: string;
   pageValue: number;
   limit: string;

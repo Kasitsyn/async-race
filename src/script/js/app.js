@@ -1,4 +1,4 @@
-import { createCar, deleteCar, getCars, QUERYPARAMS } from './API.js';
+import { createCar, deleteCar, getCars, toggleEngine, QUERYPARAMS } from './API.js';
 import { Article } from './Article.js';
 import { DATABASE, initState, nameCars, saveToLocalStorage, state } from './Store.js';
 //================= DATA FOR TESTING =================
@@ -98,13 +98,13 @@ export const addMenuHandler = () => {
     });
 };
 export const addArticleHandlers = () => {
-    var _a, _b;
+    var _a, _b, _c;
     const UIArticle = {
         selectBtnAll: document.querySelectorAll('#select-btn'),
         removeBtnAll: document.querySelectorAll('#remove-btn'),
         title: document.querySelector('#article-title'),
-        startBtn: document.querySelector('#start-btn'),
-        breakBtn: document.querySelector('#break-btn'),
+        startBtnAll: document.querySelectorAll('#start-btn'),
+        breakBtnAll: document.querySelectorAll('#break-btn'),
         carImg: document.querySelector('#car-img'),
         flagImg: document.querySelector('#flag-img')
     };
@@ -117,12 +117,16 @@ export const addArticleHandlers = () => {
     (_a = UIArticle.selectBtnAll) === null || _a === void 0 ? void 0 : _a.forEach((el) => el.addEventListener('click', async (e) => {
         saveId(e);
     }));
-    (_b = UIArticle.removeBtnAll) === null || _b === void 0 ? void 0 : _b.forEach(el => el.addEventListener('click', async (e) => {
+    (_b = UIArticle.removeBtnAll) === null || _b === void 0 ? void 0 : _b.forEach((el) => el.addEventListener('click', async (e) => {
         saveId(e);
         await deleteCar(state.id).then(() => {
             console.log(state.id);
             renderArticleAll(QUERYPARAMS.pageValue);
         });
+    }));
+    (_c = UIArticle.startBtnAll) === null || _c === void 0 ? void 0 : _c.forEach((el) => el.addEventListener('click', async (e) => {
+        saveId(e);
+        await toggleEngine([{ key: QUERYPARAMS.id, value: state.id }, { key: QUERYPARAMS.status, value: state.id }]);
     }));
 };
 export const addFooterHandlers = () => {
@@ -202,4 +206,3 @@ export const generateManyCars = (amount) => {
 renderCarsNumber();
 renderPageNumber();
 renderArticleAll(QUERYPARAMS.pageValue);
-console.log(generateManyCars(10));

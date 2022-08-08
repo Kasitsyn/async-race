@@ -1,4 +1,4 @@
-import { stateType } from "./types/types";
+import { stateType } from "./Types";
 
 export const DATABASE = 'database'
 

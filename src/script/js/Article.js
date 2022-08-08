@@ -14,8 +14,8 @@ export class Article {
         <span class="article__title" id="article-title">${this.name}</span>
       </header>
       <div class="controls">
-        <button class="control__btn control__btn--start" id="start-btn">A</button>
-        <button class="control__btn control__btn--break" id="break-btn">B</button>
+        <button class="control__btn control__btn--start" id="start-btn" data-id=${this.id}>A</button>
+        <button class="control__btn control__btn--break" id="break-btn" data-id=${this.id}>B</button>
       </div>
       <div class="racing">  
         <svg width="100" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" aria-labelledby="title"

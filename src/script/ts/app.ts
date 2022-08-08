@@ -1,7 +1,7 @@
 import { createCar, deleteCar, engineDrive, generateQueryString, getCar, getCars, updateCar, toggleEngine, getWinners, getWinner, createWinner, deleteWinner, updateWinner, QUERYPARAMS } from './API.js';
 import { Article } from './Article.js';
 import { DATABASE, initState, nameCars, saveToLocalStorage, state } from './Store.js';
-import { ICar, winner } from './types/types.js';
+import { ICar } from './Types.js';
 
 //================= DATA FOR TESTING =================
 
@@ -115,8 +115,8 @@ export const addArticleHandlers = (): void => {
     selectBtnAll: document.querySelectorAll<HTMLButtonElement>('#select-btn'),
     removeBtnAll: document.querySelectorAll<HTMLButtonElement>('#remove-btn'),
     title: document.querySelector<HTMLHeadingElement>('#article-title'),
-    startBtn: document.querySelector<HTMLButtonElement>('#start-btn'),
-    breakBtn: document.querySelector<HTMLButtonElement>('#break-btn'),
+    startBtnAll: document.querySelectorAll<HTMLButtonElement>('#start-btn'),
+    breakBtnAll: document.querySelectorAll<HTMLButtonElement>('#break-btn'),
     carImg: document.querySelector<HTMLImageElement>('#car-img'),
     flagImg: document.querySelector<HTMLImageElement>('#flag-img')
   }
@@ -134,12 +134,17 @@ export const addArticleHandlers = (): void => {
 
   }))
 
-  UIArticle.removeBtnAll?.forEach(el => el.addEventListener('click', async (e) => {
+  UIArticle.removeBtnAll?.forEach((el) => el.addEventListener('click', async (e) => {
     saveId(e)
     await deleteCar(state.id).then(() => {
       console.log(state.id)
       renderArticleAll(QUERYPARAMS.pageValue)
     })
+  }))
+
+  UIArticle.startBtnAll?.forEach((el) => el.addEventListener('click', async (e) => {
+    saveId(e)
+    await toggleEngine([{key: QUERYPARAMS.id, value: state.id}, {key: QUERYPARAMS.status, value: state.id}])
   }))
 }
 
@@ -234,7 +239,9 @@ export const generateManyCars = (amount: number): ICar[] => {
 renderCarsNumber()
 renderPageNumber()
 renderArticleAll(QUERYPARAMS.pageValue)
-console.log(generateManyCars(10))
+
+
+
 
 
 
