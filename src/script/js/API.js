@@ -4,7 +4,10 @@ export const QUERYPARAMS = {
     pageValue: 1,
     limit: '_limit',
     limitValue: 7,
-    status: 'stopped'
+    status: 'status',
+    statusValueStart: 'started',
+    statusValueBreak: 'stopped',
+    statusValueDrive: 'drive'
 };
 const baseUrl = 'http://127.0.0.1:3000';
 const path = {
@@ -64,11 +67,16 @@ export const toggleEngine = async (queryParams) => {
     return data;
 };
 export const engineDrive = async (queryParams) => {
-    const response = await fetch(`${baseUrl}${path.engine}${generateQueryString(queryParams)}`, {
-        method: "PATCH"
-    });
-    const data = await response.json();
-    return data;
+    try {
+        const response = await fetch(`${baseUrl}${path.engine}${generateQueryString(queryParams)}`, {
+            method: "PATCH"
+        });
+        return response.status !== 200 ? await response.text() : Object.assign({}, (await response.json()));
+    }
+    catch (error) {
+        if (error instanceof Error)
+            throw new Error(error.message);
+    }
 };
 //================= WINNERS =================
 export const getWinners = async (queryParams) => {

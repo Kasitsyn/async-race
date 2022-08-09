@@ -15,6 +15,9 @@ export type stateType = {
   pageAmount: number;
   color: string | null;
   name: string | null;
+  velocity: number | null,
+  distance: number | null,
+  success: true | false
 }
 
 export interface ICar {
@@ -42,9 +45,16 @@ export type winner = {
 
 export type constantQueryParams = {
   id: string;
-  status: 'started' | 'stopped';
+  status: string;
   page: string;
   pageValue: number;
   limit: string;
   limitValue: number;
+  statusValueStart: string;
+  statusValueBreak: string;
+  statusValueDrive: string;
+}
+
+export type driveStatus = {
+  success: true;
 }

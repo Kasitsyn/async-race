@@ -1,4 +1,4 @@
-import { createCar, deleteCar, getCars, toggleEngine, QUERYPARAMS } from './API.js';
+import { createCar, deleteCar, engineDrive, getCars, toggleEngine, QUERYPARAMS } from './API.js';
 import { Article } from './Article.js';
 import { DATABASE, initState, nameCars, saveToLocalStorage, state } from './Store.js';
 //================= DATA FOR TESTING =================
@@ -98,7 +98,7 @@ export const addMenuHandler = () => {
     });
 };
 export const addArticleHandlers = () => {
-    var _a, _b, _c;
+    var _a, _b, _c, _d;
     const UIArticle = {
         selectBtnAll: document.querySelectorAll('#select-btn'),
         removeBtnAll: document.querySelectorAll('#remove-btn'),
@@ -126,7 +126,23 @@ export const addArticleHandlers = () => {
     }));
     (_c = UIArticle.startBtnAll) === null || _c === void 0 ? void 0 : _c.forEach((el) => el.addEventListener('click', async (e) => {
         saveId(e);
-        await toggleEngine([{ key: QUERYPARAMS.id, value: state.id }, { key: QUERYPARAMS.status, value: state.id }]);
+        const data = await toggleEngine([{ key: QUERYPARAMS.id, value: state.id }, { key: QUERYPARAMS.status, value: QUERYPARAMS.statusValueStart }]);
+        if (data) {
+            state.velocity = data.velocity;
+            state.distance = data.distance;
+        }
+        console.log(state.velocity, state.distance);
+        const driveResponse = await engineDrive([{ key: QUERYPARAMS.id, value: state.id }, { key: QUERYPARAMS.status, value: QUERYPARAMS.statusValueDrive }]);
+        console.log(driveResponse);
+    }));
+    (_d = UIArticle.breakBtnAll) === null || _d === void 0 ? void 0 : _d.forEach((el) => el.addEventListener('click', async (e) => {
+        saveId(e);
+        const data = await toggleEngine([{ key: QUERYPARAMS.id, value: state.id }, { key: QUERYPARAMS.status, value: QUERYPARAMS.statusValueBreak }]);
+        if (data) {
+            state.velocity = data.velocity;
+            state.distance = data.distance;
+        }
+        console.log(state.velocity, state.distance);
     }));
 };
 export const addFooterHandlers = () => {
@@ -206,4 +222,4 @@ export const generateManyCars = (amount) => {
 renderCarsNumber();
 renderPageNumber();
 renderArticleAll(QUERYPARAMS.pageValue);
-alert('Привет, Друг! Дай мне еще не много времени на доработку, нужно еще с анимацией разобраться! Мой ТГ: @Yuri_Kasitsyn, мой диск: Yura#5680');
+// alert('Привет, Друг! Дай мне еще не много времени на доработку, нужно еще с анимацией разобраться! Мой ТГ: @Yuri_Kasitsyn, мой диск: Yura#5680')

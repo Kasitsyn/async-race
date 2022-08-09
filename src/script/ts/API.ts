@@ -1,4 +1,4 @@
-import { constantQueryParams, engine, ICar, queryParams, winner } from "./Types";
+import { constantQueryParams, driveStatus, engine, ICar, queryParams, winner } from "./Types";
 
 export const QUERYPARAMS: constantQueryParams = {
   id: 'id',
@@ -6,7 +6,10 @@ export const QUERYPARAMS: constantQueryParams = {
   pageValue: 1,
   limit: '_limit',
   limitValue: 7,
-  status: 'stopped'
+  status: 'status',
+  statusValueStart: 'started',
+  statusValueBreak: 'stopped',
+  statusValueDrive: 'drive'
 }
 
 const baseUrl: string = 'http://127.0.0.1:3000'
@@ -87,13 +90,19 @@ export const toggleEngine = async (queryParams: queryParams[]): Promise<engine> 
   return data;
 }
 
-export const engineDrive = async (queryParams: queryParams[]): Promise<engine> => {
-  const response = await fetch(`${baseUrl}${path.engine}${generateQueryString(queryParams)}`, {
-    method: "PATCH"
-  })
+export const engineDrive = async (queryParams: queryParams[]): Promise<driveStatus | undefined> => {
+  try {
+    const response = await fetch(`${baseUrl}${path.engine}${generateQueryString(queryParams)}`, {
+      method: "PATCH"
+    })
 
-  const data = await response.json();
-  return data;
+
+    return response.status !== 200 ? await response.text() : { ...(await response.json()) };
+
+  } catch (error) {
+    if (error instanceof Error) throw new Error(error.message)
+  }
+
 }
 
 //================= WINNERS =================
