@@ -1,0 +1,96 @@
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+
+.header {
+  margin-bottom: 40px;
+}
+.nav {
+}
+.btn {
+}
+.header__btn {
+}
+.main {
+}
+.garage {
+}
+.garage__form {
+}
+.garage__form--create {
+}
+.garage__submit {
+}
+.garage__form--update {
+}
+.menu {
+  margin-top: 5px;
+}
+.btn-race {
+}
+.btn-reset {
+}
+.btn-generate {
+}
+.title {
+  margin-top: 45px;
+}
+.cars-num {
+}
+.subtitle {
+}
+.page-num {
+}
+.articles-wrapper {
+}
+.article {
+}
+.article__header {
+}
+.article__btn {
+}
+.article__title {
+}
+.controls {
+  padding: 10px 0;
+}
+.control__btn {
+}
+.control__btn--start {
+}
+.control__btn--break {
+}
+.racing {
+  border-bottom: 4px solid black;
+  display: flex;
+  justify-content: space-between ;
+  margin-bottom: 10px;
+}
+
+.racing:last-child {
+  padding-right: 100px;
+}
+.article__nav {
+  margin-top: 40px;
+}
+.nav__btn-prev {
+}
+.nav__btn-next {
+}
+.winners {
+  
+}
+.winners-num {
+}
+.winners__table {
+}
+
