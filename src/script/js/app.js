@@ -87,7 +87,7 @@ export const addGarageFormsHandler = () => {
     });
 };
 export const addMenuHandler = () => {
-    var _a;
+    var _a, _b;
     (_a = UI.menu.generateCarsBtn) === null || _a === void 0 ? void 0 : _a.addEventListener('click', async (e) => {
         const cars = generateManyCars(10);
         const carsPromises = [];
@@ -95,6 +95,8 @@ export const addMenuHandler = () => {
             carsPromises.push(createCar(Object.assign({}, car)));
         });
         await Promise.all(carsPromises).then(() => renderArticleAll(QUERYPARAMS.pageValue));
+    });
+    (_b = UI.menu.raceBtn) === null || _b === void 0 ? void 0 : _b.addEventListener('click', async (e) => {
     });
 };
 export const addArticleHandlers = () => {
@@ -125,20 +127,23 @@ export const addArticleHandlers = () => {
         });
     }));
     (_c = UIArticle.startBtnAll) === null || _c === void 0 ? void 0 : _c.forEach((el) => el.addEventListener('click', async (e) => {
+        function move() {
+        }
         saveId(e);
-        const carImage = document.querySelector(`#car-img[data-id="${state.id}"]`);
         const data = await toggleEngine([{ key: QUERYPARAMS.id, value: state.id }, { key: QUERYPARAMS.status, value: QUERYPARAMS.statusValueStart }]);
         if (data) {
             state.velocity = data.velocity;
             state.distance = data.distance;
         }
+        const carImage = document.querySelector(`#car-img[data-id="${state.id}"]`);
         const breakBtn = document.querySelector(`#break-btn[data-id="${state.id}"]`);
         const startBtn = document.querySelector(`#start-btn[data-id="${state.id}"]`);
         const flag = document.querySelector(`#flag-img[data-id="${state.id}"]`);
-        startBtn === null || startBtn === void 0 ? void 0 : startBtn.setAttribute('disabled', 'true');
-        breakBtn === null || breakBtn === void 0 ? void 0 : breakBtn.removeAttribute('disabled');
         const ids = {};
         let time = 0;
+        startBtn === null || startBtn === void 0 ? void 0 : startBtn.setAttribute('disabled', 'true');
+        breakBtn === null || breakBtn === void 0 ? void 0 : breakBtn.removeAttribute('disabled');
+        //  ============ animation
         if (state.distance !== null && state.velocity !== null) {
             time = Math.round(state.distance / state.velocity);
         }
@@ -146,24 +151,31 @@ export const addArticleHandlers = () => {
             const CurrentDistance = getDistance(carImage, flag);
             ids[(state.id)] = animation(carImage, CurrentDistance, time);
         }
-        console.log(ids[state.id].id);
         if (breakBtn)
             breakBtn.onclick = () => window.cancelAnimationFrame(ids[state.id].id);
-        console.log(state.velocity, state.distance);
+        //  ============
         const driveResponse = await engineDrive([{ key: QUERYPARAMS.id, value: state.id }, { key: QUERYPARAMS.status, value: QUERYPARAMS.statusValueDrive }]);
         if (driveResponse === null || driveResponse === void 0 ? void 0 : driveResponse.success) {
             state.success = true;
         }
         else {
             state.success = false;
-            const breakBtn = document.querySelector(`#break-btn[data-id="${state.id}"]`);
+            window.cancelAnimationFrame(ids[state.id].id);
+            if (carImage)
+                carImage.style.transform = `translateX(0px)`;
             breakBtn === null || breakBtn === void 0 ? void 0 : breakBtn.setAttribute('disabled', 'true');
             startBtn === null || startBtn === void 0 ? void 0 : startBtn.removeAttribute('disabled');
-            console.log(driveResponse);
         }
     }));
     (_d = UIArticle.breakBtnAll) === null || _d === void 0 ? void 0 : _d.forEach((el) => el.addEventListener('click', async (e) => {
         saveId(e);
+        const carImage = document.querySelector(`#car-img[data-id="${state.id}"]`);
+        const breakBtn = document.querySelector(`#break-btn[data-id="${state.id}"]`);
+        const startBtn = document.querySelector(`#start-btn[data-id="${state.id}"]`);
+        startBtn === null || startBtn === void 0 ? void 0 : startBtn.removeAttribute('disabled');
+        breakBtn === null || breakBtn === void 0 ? void 0 : breakBtn.setAttribute('disabled', 'true');
+        if (carImage)
+            carImage.style.transform = `translateX(0px)`;
         const data = await toggleEngine([{ key: QUERYPARAMS.id, value: state.id }, { key: QUERYPARAMS.status, value: QUERYPARAMS.statusValueBreak }]);
         if (data) {
             state.velocity = data.velocity;
@@ -171,27 +183,6 @@ export const addArticleHandlers = () => {
         }
         console.log(state.velocity, state.distance);
     }));
-    function linear(timeFraction) {
-        return timeFraction;
-    }
-    let reqId = null;
-    // function animate({ timing, draw, duration }: animate) {
-    //   let start = performance.now();
-    //   requestAnimationFrame(function animate(time) {
-    //     // timeFraction изменяется от 0 до 1
-    //     let timeFraction = (time - start) / duration;
-    //     if (timeFraction > 1) timeFraction = 1;
-    //     // вычисление текущего состояния анимации
-    //     let progress = timing(timeFraction);
-    //     draw(progress); // отрисовать её
-    //     if (timeFraction < 1) {
-    //       reqId = requestAnimationFrame(animate);
-    //     }
-    //   });
-    //   reqId = requestAnimationFrame(animate);
-    //   return reqId
-    // }
-    // }
     function getPositionPointer(elem) {
         const { left, width } = elem.getBoundingClientRect();
         return left + width;
