@@ -29,10 +29,10 @@ export class Article implements IArticle {
       </header>
       <div class="controls">
         <button class="control__btn control__btn--start" id="start-btn" data-id=${this.id}>A</button>
-        <button class="control__btn control__btn--break" id="break-btn" data-id=${this.id}>B</button>
+        <button class="control__btn control__btn--break" id="break-btn" data-id=${this.id} disabled="true">B</button>
       </div>
       <div class="racing">  
-        <svg width="100" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" aria-labelledby="title"
+        <svg id="car-img" class="article__img" data-id="${this.id}" width="100" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" aria-labelledby="title"
           aria-describedby="desc" role="img" xmlns:xlink="http://www.w3.org/1999/xlink">
           <path stroke-width="2"
           stroke-linejoin="round" stroke-linecap="round" stroke="#202020" fill=${this.color}
@@ -43,7 +43,7 @@ export class Article implements IArticle {
           <circle stroke-width="2" stroke-linejoin="round" stroke-linecap="round"
           stroke="#202020" fill="none" r="6" cy="40.999" cx="49.002" data-name="layer1"></circle>
         </svg>
-        <img class="racing__flag-img" id="flag-img" src="./src/assets/icons/flag.svg" alt="flag" width="50" height="50">
+        <img class="racing__flag-img" id="flag-img" data-id="${this.id}" src="./src/assets/icons/flag.svg" alt="flag" width="50" height="50">
       </div>
      </article>
     `

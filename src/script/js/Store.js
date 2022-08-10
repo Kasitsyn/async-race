@@ -1,19 +1,22 @@
 export const DATABASE = 'database';
 export let state = {
-    id: null,
+    id: 1,
     currentPage: 1,
     pageAmount: 1,
     color: null,
     name: null,
     velocity: null,
     distance: null,
-    success: true,
+    success: false,
     cars: null,
     winners: null,
     currentWinner: null,
     carsAmount: null,
     winnersAmount: null
 };
+// export const animation: animationId = {
+//   'id': null
+// }
 export const nameCars = ['Tesla', 'Toyota', 'BMW', 'Mercedes', 'Porsche', 'Lexus', 'Ferrari', 'Lada', 'Subaru', 'Mazda'];
 export const initState = () => {
     if (localStorage.database) {

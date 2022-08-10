@@ -1,3 +1,4 @@
+
 export interface IArticle {
   id?: number | null | undefined;
   name: string | null;
@@ -5,7 +6,7 @@ export interface IArticle {
 }
 
 export type stateType = {
-  id: number | null;
+  id: number;
   cars: ICar[] | null;
   winners: winner[] | null;
   currentWinner: winner | null;
@@ -58,3 +59,16 @@ export type constantQueryParams = {
 export type driveStatus = {
   success: true;
 }
+
+export type animate = { timing: (timeFraction: number) => number, draw: (progress: number) => void, duration: number }
+
+
+
+export interface IObjNumber {
+  [id: string ]: number;
+}
+
+export interface IObj {
+  [id: string]: IObjNumber;
+}
+// export type animationId = { id: {} | null }
