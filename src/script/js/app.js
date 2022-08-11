@@ -1,4 +1,4 @@
-import { createCar, deleteCar, engineDrive, getCars, toggleEngine, QUERYPARAMS } from './API.js';
+import { createCar, deleteCar, engineDrive, getCars, updateCar, toggleEngine, QUERYPARAMS } from './API.js';
 import { Article, WinnerLine } from './Article.js';
 import { DATABASE, initState, nameCars, saveToLocalStorage, state } from './Store.js';
 function initHtml() {
@@ -119,7 +119,7 @@ export const addHeaderButtonsHandler = () => {
     });
 };
 export const addGarageFormsHandler = () => {
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c, _d, _e, _f;
     (_a = UI.form.colorInput) === null || _a === void 0 ? void 0 : _a.addEventListener('change', (e) => {
         state.color = getColor(e);
         saveToLocalStorage(DATABASE, state);
@@ -143,6 +143,15 @@ export const addGarageFormsHandler = () => {
         await createCar({ name, color });
         setCurrentPage();
         await renderArticleAll(state.pageAmount);
+    });
+    (_f = UI.form.updateBtn) === null || _f === void 0 ? void 0 : _f.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const name = state.name;
+        const color = state.color;
+        const id = state.id;
+        await updateCar(id, { name, color });
+        setCurrentPage();
+        await renderArticleAll(state.currentPage);
     });
 };
 export const addMenuHandler = () => {
@@ -460,4 +469,4 @@ renderCarsNumber();
 renderPageNumber();
 renderArticleAll(state.pageAmount);
 renderAllWinners();
-alert('Привет, Друг! Дай мне еще не много времени на доработку, нужно еще с анимацией разобраться! Мой ТГ: @Yuri_Kasitsyn, мой диск: Yura#5680');
+//alert('Привет, Друг! Дай мне еще не много времени на доработку, нужно еще с анимацией разобраться! Мой ТГ: @Yuri_Kasitsyn, мой диск: Yura#5680')
