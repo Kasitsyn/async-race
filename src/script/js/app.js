@@ -1,6 +1,6 @@
 import { createCar, deleteCar, engineDrive, getCars, updateCar, toggleEngine, QUERYPARAMS } from './API.js';
 import { Article, WinnerLine } from './Article.js';
-import { DATABASE, initState, nameCars, saveToLocalStorage, state } from './Store.js';
+import { DATABASE, initState, nameCars, nameRacers, saveToLocalStorage, state } from './Store.js';
 function initHtml() {
     document.body.innerHTML = `
   <header class="header">
@@ -157,7 +157,7 @@ export const addGarageFormsHandler = () => {
 export const addMenuHandler = () => {
     var _a, _b, _c;
     (_a = UI.menu.generateCarsBtn) === null || _a === void 0 ? void 0 : _a.addEventListener('click', async (e) => {
-        const cars = generateManyCars(10);
+        const cars = generateManyCars(100);
         const carsPromises = [];
         cars.forEach((car) => {
             carsPromises.push(createCar(Object.assign({}, car)));
@@ -285,11 +285,19 @@ export const addArticleHandlers = () => {
         saveId(e);
     }));
     (_b = UIArticle.removeBtnAll) === null || _b === void 0 ? void 0 : _b.forEach((el) => el.addEventListener('click', async (e) => {
+        var _a;
         saveId(e);
         await deleteCar(state.id).then(() => {
             console.log(state.id);
             renderArticleAll(state.currentPage);
         });
+        (_a = state.winners) === null || _a === void 0 ? void 0 : _a.forEach((winner, index) => {
+            var _a;
+            if (winner.id === state.id)
+                (_a = state.winners) === null || _a === void 0 ? void 0 : _a.splice(index, 1);
+        });
+        console.log(state.winners);
+        renderAllWinners();
     }));
     (_c = UIArticle.startBtnAll) === null || _c === void 0 ? void 0 : _c.forEach((el) => el.addEventListener('click', async (e) => {
         saveId(e);
@@ -412,6 +420,9 @@ export const renderWinner = (id, name, color, time) => {
 };
 export const renderAllWinners = () => {
     var _a;
+    const table = document.querySelector('#winner-tbody');
+    if (table)
+        table.innerHTML += '';
     (_a = state.winners) === null || _a === void 0 ? void 0 : _a.forEach((winner) => {
         renderWinner(winner.id, winner.name, winner.color, winner.time);
     });
@@ -431,7 +442,7 @@ export const savePageAmount = () => {
 export const generateManyCars = (amount) => {
     const cars = [];
     for (let i = 0; i < amount; i++) {
-        const name = nameCars[Math.floor(Math.random() * 10)];
+        const name = nameCars[Math.floor(Math.random() * 10)] + ' ' + nameRacers[Math.floor(Math.random() * 10)];
         const color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
         cars.push({ name, color });
     }

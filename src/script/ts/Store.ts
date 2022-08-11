@@ -22,6 +22,7 @@ export let state: stateType = {
 // }
 
 export const nameCars: string[] = ['Tesla', 'Toyota', 'BMW', 'Mercedes', 'Porsche', 'Lexus', 'Ferrari', 'Lada', 'Subaru', 'Mazda']
+export const nameRacers: string[] = ['Bottas', 'Gasly', 'Alonso', 'Sebastian ', 'Leclerc', 'Schumacher', 'Ricciardo', 'Russell', 'Magnussen', 'Tsunoda']
 
 
 

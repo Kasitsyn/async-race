@@ -17,6 +17,7 @@ export let state = {
 //   'id': null
 // }
 export const nameCars = ['Tesla', 'Toyota', 'BMW', 'Mercedes', 'Porsche', 'Lexus', 'Ferrari', 'Lada', 'Subaru', 'Mazda'];
+export const nameRacers = ['Bottas', 'Gasly', 'Alonso', 'Sebastian ', 'Leclerc', 'Schumacher', 'Ricciardo', 'Russell', 'Magnussen', 'Tsunoda'];
 export const initState = () => {
     if (localStorage.database) {
         const stateFromLocalStorage = JSON.parse(localStorage.getItem(DATABASE) || '{}');
