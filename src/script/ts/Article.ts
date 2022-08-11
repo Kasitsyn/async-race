@@ -25,7 +25,7 @@ export class Article implements IArticle {
       <header class="article__header">
         <button class="btn article__btn" id="select-btn" data-id=${this.id}>Select</button>
         <button class="btn article__btn" id="remove-btn" data-id=${this.id}>Remove</button>
-        <span class="article__title" id="article-title">${this.name}</span>
+        <span class="article__title" id="article-title" data-id="${this.id}">${this.name}</span>
       </header>
       <div class="controls">
         <button class="control__btn control__btn--start" id="start-btn" data-id=${this.id}>A</button>

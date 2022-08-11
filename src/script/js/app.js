@@ -154,7 +154,7 @@ export const addGarageFormsHandler = () => {
     });
 };
 export const addMenuHandler = () => {
-    var _a, _b;
+    var _a, _b, _c;
     (_a = UI.menu.generateCarsBtn) === null || _a === void 0 ? void 0 : _a.addEventListener('click', async (e) => {
         const cars = generateManyCars(10);
         const carsPromises = [];
@@ -181,7 +181,15 @@ export const addMenuHandler = () => {
             });
             promises.push(promise);
         });
-        await Promise.all(promises).then(res => res.forEach(data => move(data)));
+        const finishedCars = [];
+        function findWinner() {
+            var _a;
+            finishedCars.sort((a, b) => b.velocity - a.velocity);
+            const id = finishedCars[0].carId;
+            const name = (_a = document.querySelector(`#article-title[data-id="${id}"]`)) === null || _a === void 0 ? void 0 : _a.innerText;
+            alert(`${name}(${id}) is winner!!!`);
+        }
+        await Promise.all(promises).then(res => Promise.all(res.map(data => move(data)))).then(() => findWinner());
         async function move({ data, carId }) {
             carId = carId;
             console.log({ data, carId });
@@ -210,7 +218,12 @@ export const addMenuHandler = () => {
             //  ============
             const driveResponse = await engineDrive([{ key: QUERYPARAMS.id, value: carId }, { key: QUERYPARAMS.status, value: QUERYPARAMS.statusValueDrive }]);
             if (driveResponse === null || driveResponse === void 0 ? void 0 : driveResponse.success) {
+                // console.log(carId)
                 state.success = true;
+                // state.finishedCar['id'] = carId
+                // state.finishedCar['velocity'] = data.velocity
+                finishedCars.push(Object.assign({ carId }, data));
+                // console.log(finishedCars)
             }
             else {
                 state.success = false;
@@ -222,6 +235,9 @@ export const addMenuHandler = () => {
                 console.log(driveResponse);
             }
         }
+    });
+    (_c = UI.menu.resetBtn) === null || _c === void 0 ? void 0 : _c.addEventListener('click', async (e) => {
+        renderArticleAll(state.currentPage);
     });
 };
 export const addArticleHandlers = () => {
@@ -418,4 +434,4 @@ setCurrentPage();
 renderCarsNumber();
 renderPageNumber();
 renderArticleAll(state.pageAmount);
-// alert('Привет, Друг! Дай мне еще не много времени на доработку, нужно еще с анимацией разобраться! Мой ТГ: @Yuri_Kasitsyn, мой диск: Yura#5680')
+alert('Привет, Друг! Дай мне еще не много времени на доработку, нужно еще с анимацией разобраться! Мой ТГ: @Yuri_Kasitsyn, мой диск: Yura#5680');

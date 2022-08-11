@@ -16,9 +16,16 @@ export type stateType = {
   pageAmount: number;
   color: string | null;
   name: string | null;
-  velocity: number | null,
-  distance: number | null,
-  success: true | false
+  velocity: number | null;
+  distance: number | null;
+  success: true | false;
+
+}
+
+export type finishedCars = {
+  velocity: number;
+  distance: number;
+  carId: number | null;
 }
 
 export interface ICar {

@@ -15,7 +15,7 @@ export let state: stateType = {
   winners: null,
   currentWinner: null,
   carsAmount: null,
-  winnersAmount: null
+  winnersAmount: null,
 }
 
 // export const animation: animationId = {
