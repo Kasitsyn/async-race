@@ -164,7 +164,9 @@ export const addMenuHandler = () => {
         });
         savePageAmount();
         setCurrentPage();
-        await Promise.all(carsPromises).then(() => renderArticleAll(state.currentPage));
+        await Promise.all(carsPromises).then(async () => {
+            await renderArticleAll(state.pageAmount);
+        });
     });
     (_b = UI.menu.raceBtn) === null || _b === void 0 ? void 0 : _b.addEventListener('click', async (e) => {
         const startBtns = document.querySelectorAll('#start-btn');
@@ -207,7 +209,6 @@ export const addMenuHandler = () => {
             if (wins)
                 wins.push(winner);
             saveToLocalStorage(DATABASE, state);
-            console.log(state.winners);
             alert(`${name}(${id}) is winner!!! Time: ${time}sec`);
         }
         await Promise.all(promises).then(res => Promise.all(res.map(data => move(data)))).then(() => {
@@ -216,7 +217,6 @@ export const addMenuHandler = () => {
         });
         async function move({ data, carId }) {
             carId = carId;
-            console.log({ data, carId });
             if (data) {
                 state.velocity = data.velocity;
                 state.distance = data.distance;
@@ -242,21 +242,14 @@ export const addMenuHandler = () => {
             //  ============
             const driveResponse = await engineDrive([{ key: QUERYPARAMS.id, value: carId }, { key: QUERYPARAMS.status, value: QUERYPARAMS.statusValueDrive }]);
             if (driveResponse === null || driveResponse === void 0 ? void 0 : driveResponse.success) {
-                // console.log(carId)
                 state.success = true;
-                // state.finishedCar['id'] = carId
-                // state.finishedCar['velocity'] = data.velocity
                 finishedCars.push(Object.assign({ carId }, data));
-                // console.log(finishedCars)
             }
             else {
                 state.success = false;
-                console.log(ids[carId]);
                 window.cancelAnimationFrame(ids[carId].id);
-                // if (carImage) carImage.style.transform = `translateX(0px)`
                 breakBtn === null || breakBtn === void 0 ? void 0 : breakBtn.setAttribute('disabled', 'true');
                 startBtn === null || startBtn === void 0 ? void 0 : startBtn.removeAttribute('disabled');
-                console.log(driveResponse);
             }
         }
     });
@@ -288,7 +281,6 @@ export const addArticleHandlers = () => {
         var _a;
         saveId(e);
         await deleteCar(state.id).then(() => {
-            console.log(state.id);
             renderArticleAll(state.currentPage);
         });
         (_a = state.winners) === null || _a === void 0 ? void 0 : _a.forEach((winner, index) => {
@@ -296,7 +288,6 @@ export const addArticleHandlers = () => {
             if (winner.id === state.id)
                 (_a = state.winners) === null || _a === void 0 ? void 0 : _a.splice(index, 1);
         });
-        console.log(state.winners);
         renderAllWinners();
     }));
     (_c = UIArticle.startBtnAll) === null || _c === void 0 ? void 0 : _c.forEach((el) => el.addEventListener('click', async (e) => {
@@ -332,10 +323,8 @@ export const addArticleHandlers = () => {
         else {
             state.success = false;
             window.cancelAnimationFrame(ids[state.id].id);
-            // if (carImage) carImage.style.transform = `translateX(0px)`
             breakBtn === null || breakBtn === void 0 ? void 0 : breakBtn.setAttribute('disabled', 'true');
             startBtn === null || startBtn === void 0 ? void 0 : startBtn.removeAttribute('disabled');
-            console.log(driveResponse);
         }
     }));
     (_d = UIArticle.breakBtnAll) === null || _d === void 0 ? void 0 : _d.forEach((el) => el.addEventListener('click', async (e) => {
@@ -352,7 +341,6 @@ export const addArticleHandlers = () => {
             state.velocity = data.velocity;
             state.distance = data.distance;
         }
-        console.log(state.velocity, state.distance);
     }));
 };
 export const addFooterHandlers = () => {
@@ -391,9 +379,9 @@ export const renderArticleAll = async (page) => {
     renderCarsNumber();
     addArticleHandlers();
     savePageAmount();
+    setCurrentPage();
     renderFooterBtn();
     renderPageNumber();
-    console.log(state.currentPage);
 };
 export const renderCarsNumber = () => {
     UI.garage.carsNum && state.carsAmount !== null
@@ -422,7 +410,7 @@ export const renderAllWinners = () => {
     var _a;
     const table = document.querySelector('#winner-tbody');
     if (table)
-        table.innerHTML += '';
+        table.innerHTML = '';
     (_a = state.winners) === null || _a === void 0 ? void 0 : _a.forEach((winner) => {
         renderWinner(winner.id, winner.name, winner.color, winner.time);
     });
@@ -432,12 +420,11 @@ export const renderAllWinners = () => {
 //   car.style.left = timePassed / 5 + 'px';
 // }
 //================= PAGE =================
-export const savePageAmount = () => {
+export const savePageAmount = async () => {
     state.pageAmount = state.carsAmount
         ? Math.ceil(state.carsAmount / QUERYPARAMS.limitValue)
         : 1;
     saveToLocalStorage(DATABASE, state);
-    console.log(QUERYPARAMS.pageValue, state.carsAmount, QUERYPARAMS.limitValue, state.pageAmount);
 };
 export const generateManyCars = (amount) => {
     const cars = [];

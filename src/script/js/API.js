@@ -75,7 +75,7 @@ export const engineDrive = async (queryParams) => {
     }
     catch (error) {
         if (error instanceof Error)
-            throw new Error(error.message);
+            console.log(error.message);
     }
 };
 //================= WINNERS =================

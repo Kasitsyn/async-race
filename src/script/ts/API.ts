@@ -96,11 +96,10 @@ export const engineDrive = async (queryParams: queryParams[]): Promise<driveStat
       method: "PATCH"
     })
 
-
     return response.status !== 200 ? await response.text() : { ...(await response.json()) };
 
   } catch (error) {
-    if (error instanceof Error) throw new Error(error.message)
+    if (error instanceof Error) console.log(error.message)
   }
 
 }
