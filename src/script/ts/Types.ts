@@ -65,10 +65,15 @@ export type animate = { timing: (timeFraction: number) => number, draw: (progres
 
 
 export interface IObjNumber {
-  [id: string ]: number;
+  [id: string]: number;
 }
 
 export interface IObj {
   [id: string]: IObjNumber;
 }
 // export type animationId = { id: {} | null }
+
+export type promiseResponse = {
+  data: engine
+  carId: number
+}

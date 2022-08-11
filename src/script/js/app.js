@@ -104,26 +104,26 @@ export const addMenuHandler = () => {
                 const getId = async (el) => {
                     if (el.dataset.id)
                         return +(el.dataset.id);
+                    return 1;
                 };
                 const carId = await getId(el);
                 const data = await toggleEngine([{ key: QUERYPARAMS.id, value: carId }, { key: QUERYPARAMS.status, value: QUERYPARAMS.statusValueStart }]);
-                const driveResponse = await engineDrive([{ key: QUERYPARAMS.id, value: carId }, { key: QUERYPARAMS.status, value: QUERYPARAMS.statusValueDrive }]);
-                res({ data, driveResponse, carId });
+                res({ data, carId });
             });
             promises.push(promise);
         });
         await Promise.all(promises).then(res => res.forEach(data => move(data)));
-        function move({ data, driveResponse, carId }) {
-            state.id = carId;
-            console.log({ data, driveResponse, carId });
+        async function move({ data, carId }) {
+            carId = carId;
+            console.log({ data, carId });
             if (data) {
                 state.velocity = data.velocity;
                 state.distance = data.distance;
             }
-            const carImage = document.querySelector(`#car-img[data-id="${state.id}"]`);
-            const breakBtn = document.querySelector(`#break-btn[data-id="${state.id}"]`);
-            const startBtn = document.querySelector(`#start-btn[data-id="${state.id}"]`);
-            const flag = document.querySelector(`#flag-img[data-id="${state.id}"]`);
+            const carImage = document.querySelector(`#car-img[data-id="${carId}"]`);
+            const breakBtn = document.querySelector(`#break-btn[data-id="${carId}"]`);
+            const startBtn = document.querySelector(`#start-btn[data-id="${carId}"]`);
+            const flag = document.querySelector(`#flag-img[data-id="${carId}"]`);
             const ids = {};
             let time = 0;
             startBtn === null || startBtn === void 0 ? void 0 : startBtn.setAttribute('disabled', 'true');
@@ -134,19 +134,20 @@ export const addMenuHandler = () => {
             }
             if (carImage && flag) {
                 const CurrentDistance = getDistance(carImage, flag);
-                ids[(state.id)] = animation(carImage, CurrentDistance, time);
+                ids[carId] = animation(carImage, CurrentDistance, time);
             }
             if (breakBtn)
-                breakBtn.onclick = () => window.cancelAnimationFrame(ids[state.id].id);
+                breakBtn.onclick = () => window.cancelAnimationFrame(ids[carId].id);
             //  ============
+            const driveResponse = await engineDrive([{ key: QUERYPARAMS.id, value: carId }, { key: QUERYPARAMS.status, value: QUERYPARAMS.statusValueDrive }]);
             if (driveResponse === null || driveResponse === void 0 ? void 0 : driveResponse.success) {
                 state.success = true;
             }
             else {
                 state.success = false;
-                window.cancelAnimationFrame(ids[state.id].id);
-                if (carImage)
-                    carImage.style.transform = `translateX(0px)`;
+                console.log(ids[carId]);
+                window.cancelAnimationFrame(ids[carId].id);
+                // if (carImage) carImage.style.transform = `translateX(0px)`
                 breakBtn === null || breakBtn === void 0 ? void 0 : breakBtn.setAttribute('disabled', 'true');
                 startBtn === null || startBtn === void 0 ? void 0 : startBtn.removeAttribute('disabled');
                 console.log(driveResponse);
@@ -214,8 +215,7 @@ export const addArticleHandlers = () => {
         else {
             state.success = false;
             window.cancelAnimationFrame(ids[state.id].id);
-            if (carImage)
-                carImage.style.transform = `translateX(0px)`;
+            // if (carImage) carImage.style.transform = `translateX(0px)`
             breakBtn === null || breakBtn === void 0 ? void 0 : breakBtn.setAttribute('disabled', 'true');
             startBtn === null || startBtn === void 0 ? void 0 : startBtn.removeAttribute('disabled');
             console.log(driveResponse);
