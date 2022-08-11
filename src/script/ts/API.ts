@@ -1,4 +1,4 @@
-import { constantQueryParams, driveStatus, engine, ICar, queryParams, winner } from "./Types";
+import { constantQueryParams, driveStatus, engine, ICar, queryParams, winnerT } from "./Types";
 
 export const QUERYPARAMS: constantQueryParams = {
   id: 'id',
@@ -107,7 +107,7 @@ export const engineDrive = async (queryParams: queryParams[]): Promise<driveStat
 
 //================= WINNERS =================
 
-export const getWinners = async (queryParams: queryParams[]): Promise<{ data: winner[], count: number }> => {
+export const getWinners = async (queryParams: queryParams[]): Promise<{ data: winnerT[], count: number }> => {
   const response = await fetch(`${baseUrl}${path.winners}${generateQueryString(queryParams)}`)
   const data = await response.json()
 
@@ -115,13 +115,13 @@ export const getWinners = async (queryParams: queryParams[]): Promise<{ data: wi
   return { data, count }
 }
 
-export const getWinner = async (id: number | null): Promise<winner> => {
+export const getWinner = async (id: number | null): Promise<winnerT> => {
   const response = await fetch(`${baseUrl}${path.winners}/${id}`)
   const data = await response.json()
   return data
 }
 
-export const createWinner = async (dataParams: winner): Promise<winner> => {
+export const createWinner = async (dataParams: winnerT): Promise<winnerT> => {
   const response = await fetch(`${baseUrl}${path.garage}`, {
     method: 'POST',
     headers: {
@@ -143,7 +143,7 @@ export const deleteWinner = async (id: number | null): Promise<{}> => {
   return data
 }
 
-export const updateWinner = async (id: number | null, dataParams: winner): Promise<winner | {}> => {
+export const updateWinner = async (id: number | null, dataParams: winnerT): Promise<winnerT | {}> => {
   const response = await fetch(`${baseUrl}${path.winners}/${id}`, {
     method: 'PUT',
     headers: {

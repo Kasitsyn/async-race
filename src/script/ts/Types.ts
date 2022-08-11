@@ -8,8 +8,7 @@ export interface IArticle {
 export type stateType = {
   id: number;
   cars: ICar[] | null;
-  winners: winner[] | null;
-  currentWinner: winner | null;
+  winners: winnerT[] | null;
   carsAmount: number | null;
   winnersAmount: number | null;
   currentPage: number;
@@ -46,9 +45,11 @@ export type queryParams = {
   value: number | string | null;
 }
 
-export type winner = {
-  wins: number;
-  time: number;
+export type winnerT = {
+  time: number | null;
+  id: number | null;
+  color: string | null;
+  name: string | null;
 }
 
 export type constantQueryParams = {

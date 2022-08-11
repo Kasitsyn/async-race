@@ -1,5 +1,5 @@
 import { createCar, deleteCar, engineDrive, getCars, toggleEngine, QUERYPARAMS } from './API.js';
-import { Article } from './Article.js';
+import { Article, WinnerLine } from './Article.js';
 import { DATABASE, initState, nameCars, saveToLocalStorage, state } from './Store.js';
 function initHtml() {
     document.body.innerHTML = `
@@ -48,18 +48,10 @@ function initHtml() {
             <th>Number</th>
             <th>Car</th>
             <th>Name</th>
-            <th>Wins</th>
             <th>Best time (sec)</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td><img src="./src/assets/icons/car.svg" alt="car" width="30" height="30"></td>
-            <td>Tesla</td>
-            <td>1</td>
-            <td>10</td>
-          </tr>
+        <tbody id="winner-tbody">
         </tbody>
       </table>
     </section>
@@ -182,14 +174,37 @@ export const addMenuHandler = () => {
             promises.push(promise);
         });
         const finishedCars = [];
+        const winners = [];
+        const winner = {
+            id: null,
+            color: null,
+            name: null,
+            time: null,
+        };
         function findWinner() {
-            var _a;
+            var _a, _b;
             finishedCars.sort((a, b) => b.velocity - a.velocity);
             const id = finishedCars[0].carId;
             const name = (_a = document.querySelector(`#article-title[data-id="${id}"]`)) === null || _a === void 0 ? void 0 : _a.innerText;
-            alert(`${name}(${id}) is winner!!!`);
+            const time = +((finishedCars[0].distance / finishedCars[0].velocity) / 1000).toFixed(2);
+            const carColor = (_b = document.querySelector(`#car-img[data-id="${id}"]`)) === null || _b === void 0 ? void 0 : _b.getAttribute("fill");
+            if (name && carColor) {
+                winner.id = id;
+                winner.name = name;
+                winner.time = time;
+                winner.color = carColor;
+            }
+            const wins = state.winners;
+            if (wins)
+                wins.push(winner);
+            saveToLocalStorage(DATABASE, state);
+            console.log(state.winners);
+            alert(`${name}(${id}) is winner!!! Time: ${time}sec`);
         }
-        await Promise.all(promises).then(res => Promise.all(res.map(data => move(data)))).then(() => findWinner());
+        await Promise.all(promises).then(res => Promise.all(res.map(data => move(data)))).then(() => {
+            findWinner();
+            renderWinner(winner.id, winner.name, winner.color, winner.time);
+        });
         async function move({ data, carId }) {
             carId = carId;
             console.log({ data, carId });
@@ -382,6 +397,16 @@ export const renderFooterBtn = () => {
         ? (_c = UI.footer.prevBtn) === null || _c === void 0 ? void 0 : _c.setAttribute('disabled', 'true')
         : (_d = UI.footer.prevBtn) === null || _d === void 0 ? void 0 : _d.removeAttribute('disabled');
 };
+export const renderWinner = (id, name, color, time) => {
+    const newLine = new WinnerLine(id, name, color, time);
+    newLine.generateLine();
+};
+export const renderAllWinners = () => {
+    var _a;
+    (_a = state.winners) === null || _a === void 0 ? void 0 : _a.forEach((winner) => {
+        renderWinner(winner.id, winner.name, winner.color, winner.time);
+    });
+};
 //================= ANIMATIONS =================
 // function draw(timePassed) {
 //   car.style.left = timePassed / 5 + 'px';
@@ -434,4 +459,5 @@ setCurrentPage();
 renderCarsNumber();
 renderPageNumber();
 renderArticleAll(state.pageAmount);
+renderAllWinners();
 alert('Привет, Друг! Дай мне еще не много времени на доработку, нужно еще с анимацией разобраться! Мой ТГ: @Yuri_Kasitsyn, мой диск: Yura#5680');

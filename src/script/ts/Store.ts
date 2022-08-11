@@ -12,8 +12,7 @@ export let state: stateType = {
   distance: null,
   success: false,
   cars: null,
-  winners: null,
-  currentWinner: null,
+  winners: [],
   carsAmount: null,
   winnersAmount: null,
 }

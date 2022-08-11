@@ -101,3 +101,7 @@
 .winners-num {}
 
 .winners__table {}
+
+tr {
+  text-align: center;
+}
