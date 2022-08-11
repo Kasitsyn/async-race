@@ -83,7 +83,8 @@ export const addGarageFormsHandler = () => {
         const name = state.name;
         const color = state.color;
         await createCar({ name, color });
-        await renderArticleAll(QUERYPARAMS.pageValue);
+        setCurrentPage();
+        await renderArticleAll(state.pageAmount);
     });
 };
 export const addMenuHandler = () => {
@@ -94,7 +95,9 @@ export const addMenuHandler = () => {
         cars.forEach((car) => {
             carsPromises.push(createCar(Object.assign({}, car)));
         });
-        await Promise.all(carsPromises).then(() => renderArticleAll(QUERYPARAMS.pageValue));
+        savePageAmount();
+        setCurrentPage();
+        await Promise.all(carsPromises).then(() => renderArticleAll(state.currentPage));
     });
     (_b = UI.menu.raceBtn) === null || _b === void 0 ? void 0 : _b.addEventListener('click', async (e) => {
         const startBtns = document.querySelectorAll('#start-btn');
@@ -179,7 +182,7 @@ export const addArticleHandlers = () => {
         saveId(e);
         await deleteCar(state.id).then(() => {
             console.log(state.id);
-            renderArticleAll(QUERYPARAMS.pageValue);
+            renderArticleAll(state.currentPage);
         });
     }));
     (_c = UIArticle.startBtnAll) === null || _c === void 0 ? void 0 : _c.forEach((el) => el.addEventListener('click', async (e) => {
@@ -242,14 +245,14 @@ export const addFooterHandlers = () => {
     var _a, _b;
     (_a = UI.footer.nextBtn) === null || _a === void 0 ? void 0 : _a.addEventListener('click', async (e) => {
         var _a;
-        QUERYPARAMS.pageValue++;
-        await renderArticleAll(QUERYPARAMS.pageValue);
+        state.currentPage++;
+        await renderArticleAll(state.currentPage);
         (_a = UI.footer.nextBtn) === null || _a === void 0 ? void 0 : _a.scrollIntoView();
     });
     (_b = UI.footer.prevBtn) === null || _b === void 0 ? void 0 : _b.addEventListener('click', async (e) => {
         var _a;
-        QUERYPARAMS.pageValue--;
-        await renderArticleAll(QUERYPARAMS.pageValue);
+        state.currentPage--;
+        await renderArticleAll(state.currentPage);
         (_a = UI.footer.prevBtn) === null || _a === void 0 ? void 0 : _a.scrollIntoView();
     });
 };
@@ -267,7 +270,7 @@ export const renderArticleAll = async (page) => {
     if (articlesWrapper)
         articlesWrapper.innerHTML = '';
     const serverData = await getCars([{ key: QUERYPARAMS.page, value: page }, { key: QUERYPARAMS.limit, value: QUERYPARAMS.limitValue }]);
-    serverData.data.forEach(car => {
+    serverData.data.reverse().forEach(car => {
         car.id && car.name && car.color && renderArticle(car.id, car.name, car.color);
     });
     state.carsAmount = serverData.count;
@@ -275,6 +278,8 @@ export const renderArticleAll = async (page) => {
     addArticleHandlers();
     savePageAmount();
     renderFooterBtn();
+    renderPageNumber();
+    console.log(state.currentPage);
 };
 export const renderCarsNumber = () => {
     UI.garage.carsNum && state.carsAmount !== null
@@ -288,10 +293,10 @@ export const renderPageNumber = () => {
 };
 export const renderFooterBtn = () => {
     var _a, _b, _c, _d;
-    QUERYPARAMS.pageValue >= state.pageAmount
+    state.currentPage >= state.pageAmount
         ? (_a = UI.footer.nextBtn) === null || _a === void 0 ? void 0 : _a.setAttribute('disabled', 'true')
         : (_b = UI.footer.nextBtn) === null || _b === void 0 ? void 0 : _b.removeAttribute('disabled');
-    QUERYPARAMS.pageValue === 1
+    state.currentPage === 1
         ? (_c = UI.footer.prevBtn) === null || _c === void 0 ? void 0 : _c.setAttribute('disabled', 'true')
         : (_d = UI.footer.prevBtn) === null || _d === void 0 ? void 0 : _d.removeAttribute('disabled');
 };
@@ -339,7 +344,12 @@ function animation(car, distance, animationTime) {
     state.id = window.requestAnimationFrame(getInterval);
     return state;
 }
+function setCurrentPage() {
+    savePageAmount();
+    state.currentPage = state.pageAmount;
+}
+setCurrentPage();
 renderCarsNumber();
 renderPageNumber();
-renderArticleAll(QUERYPARAMS.pageValue);
+renderArticleAll(state.pageAmount);
 // alert('Привет, Друг! Дай мне еще не много времени на доработку, нужно еще с анимацией разобраться! Мой ТГ: @Yuri_Kasitsyn, мой диск: Yura#5680')
