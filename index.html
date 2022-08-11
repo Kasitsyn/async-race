@@ -10,68 +10,6 @@
 </head>
 
 <body>
-  <header class="header">
-    <nav class="nav">
-      <button class="btn header__btn" id="to-garage">To garage</button>
-      <button class="btn header__btn" id="to-winners">To winners</button>
-    </nav>
-  </header>
-  <main class="main">
-    <section class="garage" id="garage">
-      <form action="" class="garage__form garage__form--create" id="garage-form-create">
-        <input type="text" class="garage__form" name="name" id="name-input">
-        <input type="color" class="garage__form" name="color" id="color-input">
-        <input type="submit" class="garage__submit" id="create-btn" value="Create">
-      </form>
-      <form action="" class="garage__form garage__form--update" id="garage-form-update">
-        <input type="text" class="garage__form" name="name" id="name-input-update">
-        <input type="color" class="garage__form" name="color" id="color-input-update">
-        <input type="submit" class="garage__submit" id="update-btn" value="Update">
-      </form>
-      <div class="menu">
-        <button class="btn btn-race" id="race-btn">Race</button>
-        <button class="btn btn-reset" id="reset-btn">Reset</button>
-        <button class="btn btn-generate" id="generate-cars-btn">Generate cars</button>
-      </div>
-      <h1 class="title">
-        Garage (<span class="cars-num-garage" id="cars-num-garage"></span>)
-      </h1>
-      <h3 class="subtitle">Page #<span class="page-num-garage" id="page-num-garage">1</span></h3>
-      <div class="articles-wrapper">
-      </div>
-      <footer class="article__nav">
-        <button class="btn nav__btn-prev" id="prev-btn">Prev</button>
-        <button class="btn nav__btn-next" id="next-btn">Next</button>
-      </footer>
-    </section>
-    <section class="winners visually-hidden" id="winners">
-      <h1 class="title">
-        Winners (<span class="winners-num" id="winners-num"></span>)
-      </h1>
-      <h3 class="subtitle">Page #<span class="page-num-winners" id="page-num-winners">1</span></h3>
-      <table class="winners__table">
-        <thead>
-          <tr>
-            <th>Number</th>
-            <th>Car</th>
-            <th>Name</th>
-            <th>Wins</th>
-            <th>Best time (sec)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td><img src="./src/assets/icons/car.svg" alt="car" width="30" height="30"></td>
-            <td>Tesla</td>
-            <td>1</td>
-            <td>10</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-  </main>
-
   <script type="module" src="./src/script/js/app.js"></script>
 </body>
 
